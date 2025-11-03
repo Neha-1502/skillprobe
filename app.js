@@ -5,13 +5,13 @@ import { createClient } from "@libsql/client";
 const app = express();
 app.use(bodyParser.json());
 
-// ✅ Step 1: Connect to your Turso (libSQL) Database
+//Connecting to Turso Database
 const db = createClient({
   url: "libsql://skillprobe-neha-1502.aws-ap-south-1.turso.io",
   authToken: "eyJhbGciOiJFZERTQSIsInR5cCI6IkpXVCJ9.eyJhIjoicnciLCJpYXQiOjE3NjIxODI2OTQsImlkIjoiNDFmNTY2MzAtOGJhNC00ZDY5LTk4YTQtMjExOGI1MjA2ZDkxIiwicmlkIjoiOTQxNjk2ZWEtZjBmNy00MjcxLTgxMmMtNDc5YzY2ZDc4M2UzIn0.98i4y4h3vvdSY5q4o_MHS1TdsSnqUWJpgs0mJIs0IDkFLwgdAcozTlwSncRkzQWyp8tY3-1GcQb4AHzC5-7uBw" // replace this with your Turso token
 });
 
-// ✅ Step 2: Test database connection
+//Testing database connection
 app.get("/", async (req, res) => {
   try {
     const result = await db.execute("SELECT name FROM sqlite_master WHERE type='table';");
@@ -21,7 +21,7 @@ app.get("/", async (req, res) => {
   }
 });
 
-// ✅ Step 3: Create Paper API (Faculty uploads MCQs)
+//Creating Paper API (Faculty uploads MCQs)
 app.post("/api/create-paper", async (req, res) => {
   const { domain_id, uploaded_by, questions } = req.body;
 
@@ -55,7 +55,7 @@ app.post("/api/create-paper", async (req, res) => {
   }
 });
 
-// ✅ Step 4: Start the server
+//Starting the server
 app.listen(3000, () => {
   console.log("Server running on http://localhost:3000");
 });
