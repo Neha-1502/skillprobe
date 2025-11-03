@@ -1,0 +1,26 @@
+{
+  "name": "skillprobe",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Neha-1502/skillprobe.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/Neha-1502/skillprobe/issues"
+  },
+  "homepage": "https://github.com/Neha-1502/skillprobe#readme",
+  "dependencies": {
+    "@libsql/client": "^0.15.15",
+    "body-parser": "^2.2.0",
+    "express": "^5.1.0"
+  }
+}
