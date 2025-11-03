@@ -57,5 +57,5 @@ app.post("/api/create-paper", async (req, res) => {
 
 // ✅ Step 4: Start the server
 app.listen(3000, () => {
-  console.log("🚀 Server running on http://localhost:3000");
+  console.log("Server running on http://localhost:3000");
 });
