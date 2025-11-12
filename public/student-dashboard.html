@@ -293,6 +293,25 @@
             border: 1px solid #c3e6cb;
         }
 
+        .test-config {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border-left: 4px solid #667eea;
+        }
+
+        .test-config h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+
+        .config-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+        }
+
         @media (max-width: 768px) {
             .header {
                 flex-direction: column;
@@ -305,6 +324,10 @@
 
             .score {
                 font-size: 3rem;
+            }
+
+            .config-grid {
+                grid-template-columns: 1fr;
             }
         }
     </style>
@@ -332,11 +355,34 @@
                 <h2>Start New Test</h2>
                 <div id="startError" class="error hidden"></div>
                 
-                <div class="form-group">
-                    <label for="domainSelect">Select Domain:</label>
-                    <select id="domainSelect">
-                        <option value="">-- Select a Domain --</option>
-                    </select>
+                <div class="test-config">
+                    <h3>Test Configuration</h3>
+                    <div class="config-grid">
+                        <div class="form-group">
+                            <label for="domainSelect">Select Domain:</label>
+                            <select id="domainSelect" onchange="loadQuestionSets()">
+                                <option value="">-- Select a Domain --</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group" id="questionSetGroup" style="display: none;">
+                            <label for="questionSet">Question Set:</label>
+                            <select id="questionSet">
+                                <option value="all">All Questions (Mixed)</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="questionLimit">Number of Questions:</label>
+                            <select id="questionLimit">
+                                <option value="5">5 Questions</option>
+                                <option value="10" selected>10 Questions</option>
+                                <option value="15">15 Questions</option>
+                                <option value="20">20 Questions</option>
+                                <option value="25">25 Questions</option>
+                            </select>
+                        </div>
+                    </div>
                 </div>
                 
                 <button onclick="startTest()">Start Test</button>
@@ -428,6 +474,41 @@
             }
         }
 
+        // Load question sets when domain is selected
+        async function loadQuestionSets() {
+            const domainId = document.getElementById('domainSelect').value;
+            const setGroup = document.getElementById('questionSetGroup');
+            const setSelect = document.getElementById('questionSet');
+            
+            if (!domainId) {
+                setGroup.style.display = 'none';
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_BASE}/question-sets/${domainId}`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    setSelect.innerHTML = '<option value="all">All Questions (Mixed)</option>';
+                    
+                    if (data.question_sets && data.question_sets.length > 0) {
+                        data.question_sets.forEach(set => {
+                            setSelect.innerHTML += `<option value="${set.question_set}">${set.question_set} (${set.question_count} questions)</option>`;
+                        });
+                        setGroup.style.display = 'block';
+                    } else {
+                        setGroup.style.display = 'none';
+                    }
+                }
+            } catch (error) {
+                console.error('Error loading question sets:', error);
+                setGroup.style.display = 'none';
+            }
+        }
+
         // Switch tabs
         function switchTab(tabName) {
             document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
@@ -444,6 +525,8 @@
         // Start test
         async function startTest() {
             const domainId = document.getElementById('domainSelect').value;
+            const questionSet = document.getElementById('questionSet').value;
+            const questionLimit = document.getElementById('questionLimit').value;
             
             if (!domainId) {
                 showError('startError', 'Please select a domain first');
@@ -453,7 +536,12 @@
             hideError('startError');
             
             try {
-                const response = await fetch(`${API_BASE}/questions/${domainId}`, {
+                let url = `${API_BASE}/questions/${domainId}?limit=${questionLimit}`;
+                if (questionSet && questionSet !== 'all') {
+                    url += `&set=${encodeURIComponent(questionSet)}`;
+                }
+
+                const response = await fetch(url, {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
 
@@ -471,7 +559,7 @@
                     document.getElementById('testInterface').classList.remove('hidden');
                     document.getElementById('testInterface').scrollIntoView({ behavior: 'smooth' });
                 } else {
-                    showError('startError', 'No questions available for this domain');
+                    showError('startError', 'No questions available for this domain/set');
                 }
             } catch (error) {
                 console.error('Error loading questions:', error);
@@ -581,6 +669,7 @@
             document.getElementById('testInterface').classList.add('hidden');
             document.getElementById('testResults').classList.add('hidden');
             document.getElementById('domainSelect').value = '';
+            document.getElementById('questionSetGroup').style.display = 'none';
             currentTest = { questions: [], domainId: null };
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
@@ -602,7 +691,10 @@
                             <p><strong>Domain:</strong> ${test.domain_name}</p>
                             <p><strong>Date:</strong> ${new Date(test.test_date).toLocaleString()}</p>
                             <p><strong>Score:</strong> ${test.score}/${test.total_questions} (${test.percentage}%)</p>
-                            <p><strong>Status:</strong> ${test.percentage >= 70 ? '✅ Passed' : '❌ Failed'}</p>
+                            <p><strong>Status:</strong> ${test.percentage >= 70 ? '✅ Passed' : '❌ Needs Improvement'}</p>
+                            <button onclick="viewTestDetails(${test.test_id})" style="margin-top: 10px; padding: 8px 16px; background: #667eea; color: white; border: none; border-radius: 5px; cursor: pointer;">
+                                View Details
+                            </button>
                         </div>
                     `).join('');
                 } else {
@@ -617,6 +709,114 @@
                 console.error('Error loading history:', error);
                 container.innerHTML = '<div class="error">Error loading test history. Please try again.</div>';
             }
+        }
+
+        // View test details
+        async function viewTestDetails(testId) {
+            try {
+                const response = await fetch(`${API_BASE}/tests/${testId}`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    showTestDetailsModal(data);
+                } else {
+                    alert('Error loading test details');
+                }
+            } catch (error) {
+                console.error('Error loading test details:', error);
+                alert('Network error loading test details');
+            }
+        }
+
+        // Show test details modal
+        function showTestDetailsModal(testData) {
+            const modal = document.createElement('div');
+            modal.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0,0,0,0.8);
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                z-index: 1000;
+                padding: 20px;
+            `;
+            
+            const modalContent = document.createElement('div');
+            modalContent.style.cssText = `
+                background: white;
+                padding: 30px;
+                border-radius: 15px;
+                max-width: 800px;
+                width: 100%;
+                max-height: 90vh;
+                overflow-y: auto;
+                position: relative;
+            `;
+            
+            let questionsHtml = '';
+            testData.questions.forEach((q, index) => {
+                const isCorrect = q.is_correct;
+                const userAnswer = q.selected_option;
+                const correctAnswer = q.correct_option;
+                
+                questionsHtml += `
+                    <div class="question-card" style="border-left-color: ${isCorrect ? '#28a745' : '#dc3545'};">
+                        <h3>Question ${index + 1} ${isCorrect ? '✅' : '❌'}</h3>
+                        <p><strong>${q.question_text}</strong></p>
+                        <div class="options">
+                            ${['A', 'B', 'C', 'D'].map(opt => {
+                                const optionValue = q[`option_${opt.toLowerCase()}`];
+                                if (!optionValue) return '';
+                                
+                                let optionClass = '';
+                                if (opt === correctAnswer) {
+                                    optionClass = 'background: #d4edda; border-color: #28a745;';
+                                } else if (opt === userAnswer && !isCorrect) {
+                                    optionClass = 'background: #f8d7da; border-color: #dc3545;';
+                                }
+                                
+                                return `
+                                    <div class="option" style="${optionClass}">
+                                        <span><strong>${opt}.</strong> ${optionValue}</span>
+                                        ${opt === correctAnswer ? '<span style="color: #28a745; margin-left: auto;">✓ Correct</span>' : ''}
+                                        ${opt === userAnswer && !isCorrect ? '<span style="color: #dc3545; margin-left: auto;">✗ Your Answer</span>' : ''}
+                                    </div>
+                                `;
+                            }).join('')}
+                        </div>
+                    </div>
+                `;
+            });
+            
+            modalContent.innerHTML = `
+                <h2>Test Details - ${testData.test.domain_name}</h2>
+                <p><strong>Date:</strong> ${new Date(testData.test.test_date).toLocaleString()}</p>
+                <p><strong>Score:</strong> ${testData.test.score}/${testData.test.total_questions} (${testData.test.percentage}%)</p>
+                <div style="margin: 20px 0;">
+                    <button onclick="this.closest('div').parentElement.remove()" style="position: absolute; top: 15px; right: 15px; background: #dc3545; color: white; border: none; padding: 8px 12px; border-radius: 5px; cursor: pointer;">
+                        Close
+                    </button>
+                </div>
+                <div style="margin-top: 20px;">
+                    ${questionsHtml}
+                </div>
+            `;
+            
+            modal.appendChild(modalContent);
+            document.body.appendChild(modal);
+            
+            // Close modal when clicking outside
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.remove();
+                }
+            });
         }
 
         // Show/Hide error
