@@ -206,101 +206,20 @@ async function generateUniqueUsername(email) {
     username = `${baseUsername}${counter}`;
     counter++;
     
-    // Safety check to prevent infinite loop
     if (counter > 100) {
       throw new Error('Could not generate unique username');
     }
   }
 }
 
-// Google OAuth Login/Signup
-app.post("/api/auth/google", async (req, res) => {
-  const { email, name, googleId } = req.body;
+// REMOVED: Google OAuth endpoint (not functional without proper OAuth setup)
+// To implement Google OAuth properly, you need:
+// 1. Google Cloud Console project
+// 2. OAuth 2.0 credentials
+// 3. Frontend Google Sign-In library
+// 4. Backend verification of Google tokens
 
-  if (!email || !name || !googleId) {
-    return res.status(400).json({ error: 'Google authentication data required' });
-  }
-
-  try {
-    // Check if user exists by email
-    let result = await db.execute({
-      sql: `SELECT user_id, username, full_name, email, user_type, is_active, google_id, password 
-            FROM Users WHERE email = ?`,
-      args: [email]
-    });
-
-    let user;
-
-    if (result.rows.length === 0) {
-      // Create new user with Google account
-      const username = await generateUniqueUsername(email);
-      const user_type = 'student'; // Default to student for Google signups
-
-      const insertResult = await db.execute({
-        sql: `INSERT INTO Users (username, full_name, email, password, user_type, google_id) 
-              VALUES (?, ?, ?, ?, ?, ?)`,
-        args: [username, name, email, 'google_oauth', user_type, googleId]
-      });
-
-      user = {
-        user_id: Number(insertResult.lastInsertRowid),
-        username,
-        full_name: name,
-        email,
-        user_type
-      };
-      
-      console.log(`Created new Google user: ${email}`);
-    } else {
-      user = result.rows[0];
-      
-      if (!user.is_active) {
-        return res.status(403).json({ error: 'Account is inactive' });
-      }
-
-      // Handle existing user cases
-      if (user.google_id) {
-        // User already has Google ID, verify it matches
-        if (user.google_id !== googleId) {
-          return res.status(400).json({ error: 'Google account mismatch. This email is already linked to a different Google account.' });
-        }
-        console.log(`Google login for existing linked user: ${user.email}`);
-      } else {
-        // Existing email/password user - link Google account
-        await db.execute({
-          sql: `UPDATE Users SET google_id = ? WHERE user_id = ?`,
-          args: [googleId, user.user_id]
-        });
-        
-        console.log(`Linked Google account to existing user: ${user.email}`);
-      }
-    }
-
-    const token = jwt.sign(
-      { user_id: user.user_id, username: user.username, user_type: user.user_type },
-      JWT_SECRET,
-      { expiresIn: '24h' }
-    );
-
-    res.json({
-      message: 'Google authentication successful',
-      token,
-      user: {
-        user_id: user.user_id,
-        username: user.username,
-        full_name: user.full_name,
-        email: user.email,
-        user_type: user.user_type
-      }
-    });
-
-  } catch (error) {
-    console.error('Google auth error:', error);
-    res.status(500).json({ error: 'Error during Google authentication' });
-  }
-});
-
-// Forgot Password - Accepts both username and email
+// Forgot Password - Returns token directly (NO EMAIL SENT)
 app.post("/api/auth/forgot-password", async (req, res) => {
   const { username, email } = req.body;
 
@@ -313,14 +232,12 @@ app.post("/api/auth/forgot-password", async (req, res) => {
     let identifier;
 
     if (username) {
-      // Find user by username
       result = await db.execute({
         sql: `SELECT user_id, username, full_name, email FROM Users WHERE username = ?`,
         args: [username]
       });
       identifier = `username: ${username}`;
     } else {
-      // Find user by email
       result = await db.execute({
         sql: `SELECT user_id, username, full_name, email FROM Users WHERE email = ?`,
         args: [email]
@@ -335,7 +252,7 @@ app.post("/api/auth/forgot-password", async (req, res) => {
     const user = result.rows[0];
     
     // Generate simple 6-character reset token
-    const resetToken = crypto.randomBytes(3).toString('hex'); // 6 characters
+    const resetToken = crypto.randomBytes(3).toString('hex');
     const resetTokenExpiry = new Date(Date.now() + 30 * 60 * 1000); // 30 minutes
 
     // Store reset token in database
@@ -346,16 +263,16 @@ app.post("/api/auth/forgot-password", async (req, res) => {
 
     console.log(`🔐 Password reset token generated for ${user.username} (${user.email}): ${resetToken}`);
 
-    // Return token directly to user
+    // Return token directly (NO EMAIL FUNCTIONALITY)
     res.json({ 
       message: 'Password reset token generated successfully',
       reset_token: resetToken,
       user_id: user.user_id,
+      username: user.username,
       user_full_name: user.full_name,
       user_email: user.email,
       expires_in: '30 minutes',
-      reset_url: `${process.env.FRONTEND_URL || 'http://localhost:3000'}/reset-password.html?token=${resetToken}&user_id=${user.user_id}`,
-      instructions: 'Copy the reset token and use it on the password reset page'
+      note: 'Copy this token and use it on the reset password page. Email functionality is not configured.'
     });
 
   } catch (error) {
@@ -377,7 +294,6 @@ app.post("/api/auth/reset-password", async (req, res) => {
   }
 
   try {
-    // Verify token exists and hasn't expired
     const result = await db.execute({
       sql: `SELECT user_id, username FROM Users WHERE user_id = ? AND reset_token = ? AND reset_token_expiry > ?`,
       args: [user_id, reset_token, new Date().toISOString()]
@@ -389,7 +305,6 @@ app.post("/api/auth/reset-password", async (req, res) => {
 
     const user = result.rows[0];
 
-    // Update password and clear reset token
     const hashedPassword = await bcrypt.hash(new_password, SALT_ROUNDS);
     
     await db.execute({
@@ -433,7 +348,6 @@ app.get("/api/auth/me", authenticateToken, async (req, res) => {
 // DOMAIN ROUTES
 // ========================================
 
-// Get all active domains
 app.get("/api/domains", authenticateToken, async (req, res) => {
   try {
     const result = await db.execute(
@@ -450,7 +364,6 @@ app.get("/api/domains", authenticateToken, async (req, res) => {
 // QUESTION ROUTES
 // ========================================
 
-// Upload questions (Faculty/Admin only)
 app.post("/api/questions/upload", authenticateToken, requireRole('faculty', 'admin'), async (req, res) => {
   const { domain_id, questions, question_set_name } = req.body;
   const uploaded_by = req.user.user_id;
@@ -461,8 +374,6 @@ app.post("/api/questions/upload", authenticateToken, requireRole('faculty', 'adm
 
   try {
     const questionIds = [];
-
-    // Generate a unique set identifier if not provided
     const questionSet = question_set_name || `Set_${Date.now()}`;
 
     for (const q of questions) {
@@ -503,7 +414,6 @@ app.post("/api/questions/upload", authenticateToken, requireRole('faculty', 'adm
   }
 });
 
-// Get available question sets for a domain
 app.get("/api/question-sets/:domain_id", authenticateToken, async (req, res) => {
   const { domain_id } = req.params;
 
@@ -524,7 +434,6 @@ app.get("/api/question-sets/:domain_id", authenticateToken, async (req, res) => 
   }
 });
 
-// Get questions for a test from specific set (with shuffling and limiting)
 app.get("/api/questions/:domain_id", authenticateToken, async (req, res) => {
   const { domain_id } = req.params;
   const { set: question_set, limit = 10 } = req.query;
@@ -534,7 +443,6 @@ app.get("/api/questions/:domain_id", authenticateToken, async (req, res) => {
                FROM Questions WHERE domain_id = ? AND is_active = 1`;
     let args = [domain_id];
 
-    // If specific set is requested, filter by that set
     if (question_set && question_set !== 'all') {
       sql += ` AND question_set = ?`;
       args.push(question_set);
@@ -546,10 +454,7 @@ app.get("/api/questions/:domain_id", authenticateToken, async (req, res) => {
       return res.status(404).json({ error: 'No questions found for this domain' });
     }
 
-    // Shuffle all questions first
     const shuffled = shuffleArray([...result.rows]);
-    
-    // Take only 'limit' number of questions
     const selectedQuestions = shuffled.slice(0, Math.min(limit, shuffled.length));
 
     const questions = selectedQuestions.map(q => ({
@@ -563,7 +468,6 @@ app.get("/api/questions/:domain_id", authenticateToken, async (req, res) => {
       ].filter(opt => opt.value && opt.value.trim() !== "")
     }));
 
-    // Log test attempt
     await db.execute({
       sql: `INSERT INTO Test_Attempts (user_id, domain_id) VALUES (?, ?)`,
       args: [req.user.user_id, domain_id]
@@ -587,7 +491,6 @@ app.get("/api/questions/:domain_id", authenticateToken, async (req, res) => {
 // TEST ROUTES
 // ========================================
 
-// Submit test
 app.post("/api/tests/submit", authenticateToken, async (req, res) => {
   const { domain_id, answers } = req.body;
   const user_id = req.user.user_id;
@@ -599,7 +502,6 @@ app.post("/api/tests/submit", authenticateToken, async (req, res) => {
   try {
     const total_questions = answers.length;
 
-    // Create test entry
     const testResult = await db.execute({
       sql: `INSERT INTO Tests (user_id, domain_id, total_questions, score, percentage) 
             VALUES (?, ?, ?, 0, 0)`,
@@ -609,7 +511,6 @@ app.post("/api/tests/submit", authenticateToken, async (req, res) => {
     const test_id = Number(testResult.lastInsertRowid);
     let score = 0;
 
-    // Evaluate answers
     for (const answer of answers) {
       const { question_id, selected_option } = answer;
 
@@ -627,7 +528,6 @@ app.post("/api/tests/submit", authenticateToken, async (req, res) => {
 
       if (is_correct) score++;
 
-      // Store test question
       await db.execute({
         sql: `INSERT INTO Test_Questions (test_id, question_id, selected_option, is_correct)
               VALUES (?, ?, ?, ?)`,
@@ -637,13 +537,11 @@ app.post("/api/tests/submit", authenticateToken, async (req, res) => {
 
     const percentage = total_questions > 0 ? ((score / total_questions) * 100).toFixed(2) : 0;
 
-    // Update test score
     await db.execute({
       sql: `UPDATE Tests SET score = ?, percentage = ? WHERE test_id = ?`,
       args: [score, percentage, test_id]
     });
 
-    // Create progress report
     await db.execute({
       sql: `INSERT INTO Progress_Report (user_id, domain_id, test_id, total_questions, correct_answers, percentage)
             VALUES (?, ?, ?, ?, ?, ?)`,
@@ -664,7 +562,6 @@ app.post("/api/tests/submit", authenticateToken, async (req, res) => {
   }
 });
 
-// Get user's test history
 app.get("/api/tests/history", authenticateToken, async (req, res) => {
   try {
     const result = await db.execute({
@@ -684,7 +581,6 @@ app.get("/api/tests/history", authenticateToken, async (req, res) => {
   }
 });
 
-// Get detailed test results
 app.get("/api/tests/:test_id", authenticateToken, async (req, res) => {
   const { test_id } = req.params;
 
@@ -704,12 +600,10 @@ app.get("/api/tests/:test_id", authenticateToken, async (req, res) => {
 
     const test = testResult.rows[0];
 
-    // Check permissions
     if (test.user_id !== req.user.user_id && !['faculty', 'admin'].includes(req.user.user_type)) {
       return res.status(403).json({ error: 'Access denied' });
     }
 
-    // Get question details
     const questionsResult = await db.execute({
       sql: `SELECT tq.question_id, tq.selected_option, tq.is_correct,
             q.question_text, q.option_a, q.option_b, q.option_c, q.option_d, q.correct_option
@@ -734,10 +628,8 @@ app.get("/api/tests/:test_id", authenticateToken, async (req, res) => {
 // FACULTY ROUTES
 // ========================================
 
-// Get students who took tests on questions uploaded by this faculty
 app.get("/api/faculty/student-reports", authenticateToken, requireRole('faculty', 'admin'), async (req, res) => {
   try {
-    // Get all domains where this faculty uploaded questions
     const domainsResult = await db.execute({
       sql: `SELECT DISTINCT d.domain_id, d.domain_name, COUNT(DISTINCT q.question_id) as question_count
             FROM Questions q
@@ -758,7 +650,6 @@ app.get("/api/faculty/student-reports", authenticateToken, requireRole('faculty'
     const domainIds = domainsResult.rows.map(d => d.domain_id);
     const placeholders = domainIds.map(() => '?').join(',');
 
-    // Get all students who took tests in these domains
     const studentsResult = await db.execute({
       sql: `SELECT DISTINCT u.user_id, u.username, u.full_name, u.email,
             COUNT(DISTINCT t.test_id) as total_tests_taken,
@@ -772,7 +663,6 @@ app.get("/api/faculty/student-reports", authenticateToken, requireRole('faculty'
       args: domainIds
     });
 
-    // Get detailed test results for each student
     const detailedReports = [];
     
     for (const student of studentsResult.rows) {
@@ -811,7 +701,6 @@ app.get("/api/faculty/student-reports", authenticateToken, requireRole('faculty'
   }
 });
 
-// Get statistics for faculty's uploaded questions
 app.get("/api/faculty/question-stats", authenticateToken, requireRole('faculty', 'admin'), async (req, res) => {
   try {
     const result = await db.execute({
@@ -836,7 +725,6 @@ app.get("/api/faculty/question-stats", authenticateToken, requireRole('faculty',
   }
 });
 
-// Get faculty's question sets
 app.get("/api/faculty/question-sets", authenticateToken, requireRole('faculty', 'admin'), async (req, res) => {
   try {
     const result = await db.execute({
@@ -860,7 +748,6 @@ app.get("/api/faculty/question-sets", authenticateToken, requireRole('faculty', 
 // ADMIN ROUTES
 // ========================================
 
-// Get all users (Admin only)
 app.get("/api/admin/users", authenticateToken, requireRole('admin'), async (req, res) => {
   try {
     const result = await db.execute(
@@ -895,6 +782,7 @@ const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`🚀 Server running on http://localhost:${PORT}`);
   console.log(`🔐 Authentication enabled with JWT`);
-  console.log(`🔄 Password reset: Simple token system`);
+  console.log(`🔄 Password reset: Token-based (NO EMAIL SENDING)`);
   console.log(`📊 Database connected to Turso`);
+  console.log(`⚠️  Google OAuth removed - requires proper setup`);
 });
