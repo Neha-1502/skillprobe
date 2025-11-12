@@ -1,28 +1,44 @@
 {
   "name": "skillprobe",
   "version": "1.0.0",
-  "description": "",
+  "description": "MCQ-based Technical Test Platform",
   "main": "app.js",
   "type": "module",
   "scripts": {
     "start": "node app.js",
+    "dev": "nodemon app.js",
+    "server": "node --watch app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "@libsql/client": "^0.15.15",
+    "bcrypt": "^6.0.0",
+    "body-parser": "^1.20.2",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "jsonwebtoken": "^9.0.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Neha-1502/skillprobe.git"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": [
+    "mcq",
+    "quiz",
+    "testing",
+    "education",
+    "technical-test"
+  ],
+  "author": "Neha Kashyap",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/Neha-1502/skillprobe/issues"
   },
   "homepage": "https://github.com/Neha-1502/skillprobe#readme",
-  "dependencies": {
-    "@libsql/client": "^0.15.15",
-    "body-parser": "^2.2.0",
-    "dotenv": "^17.2.3",
-    "express": "^5.1.0"
+  "engines": {
+    "node": ">=18.0.0"
   }
 }

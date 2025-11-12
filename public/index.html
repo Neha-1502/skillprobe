@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MCQ Platform - Login</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .auth-container {
+            max-width: 450px;
+            width: 100%;
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 2rem;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 0.95rem;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #555;
+            font-size: 0.9rem;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 15px;
+            transition: border-color 0.3s;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .toggle-link {
+            text-align: center;
+            margin-top: 20px;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .toggle-link a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .toggle-link a:hover {
+            text-decoration: underline;
+        }
+
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            border: 1px solid #f5c6cb;
+            font-size: 0.9rem;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .help-text {
+            font-size: 0.85rem;
+            color: #999;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Login Form -->
+    <div id="loginForm" class="auth-container">
+        <h1>🎯 MCQ Platform</h1>
+        <p class="subtitle">Sign in to continue</p>
+        
+        <div id="loginError" class="error hidden"></div>
+        
+        <form onsubmit="login(event)">
+            <div class="form-group">
+                <label for="loginUsername">Username</label>
+                <input type="text" id="loginUsername" placeholder="Enter username" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="loginPassword">Password</label>
+                <input type="password" id="loginPassword" placeholder="Enter password" required>
+            </div>
+            
+            <button type="submit" id="loginBtn">Login</button>
+        </form>
+        
+        <div class="toggle-link">
+            Don't have an account? <a href="#" onclick="showSignup(event)">Sign up</a>
+        </div>
+    </div>
+
+    <!-- Signup Form -->
+    <div id="signupForm" class="auth-container hidden">
+        <h1>📝 Create Account</h1>
+        <p class="subtitle">Join the MCQ Platform</p>
+        
+        <div id="signupError" class="error hidden"></div>
+        
+        <form onsubmit="signup(event)">
+            <div class="form-group">
+                <label for="signupUsername">Username</label>
+                <input type="text" id="signupUsername" placeholder="Choose a username" required minlength="3">
+                <p class="help-text">Minimum 3 characters</p>
+            </div>
+            
+            <div class="form-group">
+                <label for="signupFullName">Full Name</label>
+                <input type="text" id="signupFullName" placeholder="Enter your full name" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="signupEmail">Email</label>
+                <input type="email" id="signupEmail" placeholder="Enter your email" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="signupPassword">Password</label>
+                <input type="password" id="signupPassword" placeholder="Create a password" required minlength="6">
+                <p class="help-text">Minimum 6 characters</p>
+            </div>
+            
+            <div class="form-group">
+                <label for="signupUserType">I am a:</label>
+                <select id="signupUserType" required>
+                    <option value="">-- Select Role --</option>
+                    <option value="student">Student - Take tests</option>
+                    <option value="faculty">Faculty - Upload questions & take tests</option>
+                    <option value="admin">Admin - Full system access</option>
+                </select>
+            </div>
+            
+            <button type="submit" id="signupBtn">Create Account</button>
+        </form>
+        
+        <div class="toggle-link">
+            Already have an account? <a href="#" onclick="showLogin(event)">Login</a>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:3000/api';
+
+        // Show/Hide Forms
+        function showLogin(e) {
+            if (e) e.preventDefault();
+            document.getElementById('loginForm').classList.remove('hidden');
+            document.getElementById('signupForm').classList.add('hidden');
+            clearErrors();
+        }
+
+        function showSignup(e) {
+            if (e) e.preventDefault();
+            document.getElementById('loginForm').classList.add('hidden');
+            document.getElementById('signupForm').classList.remove('hidden');
+            clearErrors();
+        }
+
+        function clearErrors() {
+            document.getElementById('loginError').classList.add('hidden');
+            document.getElementById('signupError').classList.add('hidden');
+        }
+
+        // Login
+        async function login(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('loginUsername').value.trim();
+            const password = document.getElementById('loginPassword').value;
+            const btn = document.getElementById('loginBtn');
+
+            if (!username || !password) {
+                showError('loginError', 'Please fill in all fields');
+                return;
+            }
+
+            btn.disabled = true;
+            btn.innerHTML = '<span class="loading"></span>';
+
+            try {
+                const response = await fetch(`${API_BASE}/auth/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    localStorage.setItem('token', data.token);
+                    localStorage.setItem('user', JSON.stringify(data.user));
+                    redirectToDashboard(data.user.user_type);
+                } else {
+                    showError('loginError', data.error || 'Login failed');
+                    btn.disabled = false;
+                    btn.textContent = 'Login';
+                }
+            } catch (error) {
+                console.error('Login error:', error);
+                showError('loginError', 'Network error. Please check if the server is running.');
+                btn.disabled = false;
+                btn.textContent = 'Login';
+            }
+        }
+
+        // Signup
+        async function signup(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('signupUsername').value.trim();
+            const full_name = document.getElementById('signupFullName').value.trim();
+            const email = document.getElementById('signupEmail').value.trim();
+            const password = document.getElementById('signupPassword').value;
+            const user_type = document.getElementById('signupUserType').value;
+            const btn = document.getElementById('signupBtn');
+
+            if (!username || !full_name || !email || !password || !user_type) {
+                showError('signupError', 'Please fill in all fields');
+                return;
+            }
+
+            if (username.length < 3) {
+                showError('signupError', 'Username must be at least 3 characters');
+                return;
+            }
+
+            if (password.length < 6) {
+                showError('signupError', 'Password must be at least 6 characters');
+                return;
+            }
+
+            btn.disabled = true;
+            btn.innerHTML = '<span class="loading"></span>';
+
+            try {
+                const response = await fetch(`${API_BASE}/auth/signup`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, full_name, email, password, user_type })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    localStorage.setItem('token', data.token);
+                    localStorage.setItem('user', JSON.stringify(data.user));
+                    redirectToDashboard(data.user.user_type);
+                } else {
+                    showError('signupError', data.error || 'Signup failed');
+                    btn.disabled = false;
+                    btn.textContent = 'Create Account';
+                }
+            } catch (error) {
+                console.error('Signup error:', error);
+                showError('signupError', 'Network error. Please check if the server is running.');
+                btn.disabled = false;
+                btn.textContent = 'Create Account';
+            }
+        }
+
+        // Redirect to appropriate dashboard
+        function redirectToDashboard(userType) {
+            if (userType === 'student') {
+                window.location.href = 'student-dashboard.html';
+            } else if (userType === 'faculty') {
+                window.location.href = 'faculty-dashboard.html';
+            } else if (userType === 'admin') {
+                window.location.href = 'admin-dashboard.html';
+            }
+        }
+
+        // Show error message
+        function showError(elementId, message) {
+            const el = document.getElementById(elementId);
+            el.textContent = message;
+            el.classList.remove('hidden');
+            setTimeout(() => el.classList.add('hidden'), 5000);
+        }
+
+        // Check if already logged in
+        window.onload = function() {
+            const token = localStorage.getItem('token');
+            const user = localStorage.getItem('user');
+            
+            if (token && user) {
+                const userData = JSON.parse(user);
+                redirectToDashboard(userData.user_type);
+            }
+        };
+    </script>
+</body>
+</html>

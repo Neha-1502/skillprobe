@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Faculty Dashboard - MCQ Platform</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f7fa;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+
+        .header h1 {
+            font-size: 1.8rem;
+        }
+
+        .user-badge {
+            background: rgba(255,255,255,0.2);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+        }
+
+        .logout-btn {
+            padding: 10px 20px;
+            background: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background 0.3s;
+        }
+
+        .logout-btn:hover {
+            background: #c82333;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 15px 20px;
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+            font-weight: 600;
+            color: #555;
+        }
+
+        .tab.active {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            border-color: transparent;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+
+        .card h2 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #555;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 15px;
+            transition: border-color 0.3s;
+            font-family: inherit;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #f5576c;
+        }
+
+        button {
+            padding: 12px 30px;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+        }
+
+        button.secondary {
+            background: #6c757d;
+            margin-right: 10px;
+        }
+
+        button.danger {
+            background: #dc3545;
+            margin-left: 10px;
+        }
+
+        .question-input {
+            background: #f8f9fa;
+            padding: 25px;
+            margin: 20px 0;
+            border-radius: 10px;
+            border-left: 4px solid #f5576c;
+            position: relative;
+        }
+
+        .question-input h3 {
+            color: #f5576c;
+            margin-bottom: 15px;
+        }
+
+        .question-input textarea,
+        .question-input input,
+        .question-input select {
+            margin-bottom: 12px;
+        }
+
+        .remove-question {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 5px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.85rem;
+        }
+
+        .test-item {
+            background: white;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 10px;
+            border-left: 4px solid #f5576c;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .success {
+            background: #d4edda;
+            color: #155724;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border: 1px solid #c3e6cb;
+        }
+
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border: 1px solid #f5c6cb;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #999;
+        }
+
+        .question-card {
+            background: #f8f9fa;
+            padding: 25px;
+            margin: 20px 0;
+            border-radius: 10px;
+            border-left: 4px solid #f5576c;
+        }
+
+        .question-card h3 {
+            color: #f5576c;
+            margin-bottom: 15px;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .option {
+            padding: 15px;
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+        }
+
+        .option:hover {
+            border-color: #f5576c;
+            background: #fff5f7;
+        }
+
+        .option input[type="radio"] {
+            margin-right: 12px;
+            width: 18px;
+            height: 18px;
+        }
+
+        .result-card {
+            background: linear-gradient(135deg, #28a745, #20c997);
+            color: white;
+            padding: 50px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 5px 25px rgba(40, 167, 69, 0.4);
+        }
+
+        .score {
+            font-size: 5rem;
+            font-weight: bold;
+            margin: 30px 0;
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .tabs {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div>
+                <h1>👨‍🏫 Faculty Dashboard</h1>
+                <div class="user-badge" id="userName"></div>
+            </div>
+            <button class="logout-btn" onclick="logout()">Logout</button>
+        </div>
+
+        <!-- Tabs -->
+        <div class="tabs">
+            <div class="tab active" onclick="switchTab('uploadQuestions')">📤 Upload Questions</div>
+            <div class="tab" onclick="switchTab('takeTest')">📝 Take Test</div>
+            <div class="tab" onclick="switchTab('testHistory')">📋 Test History</div>
+        </div>
+
+        <!-- Upload Questions Tab -->
+        <div id="uploadQuestions" class="tab-content active">
+            <div class="card">
+                <h2>Upload Questions</h2>
+                <div id="uploadSuccess" class="success hidden"></div>
+                <div id="uploadError" class="error hidden"></div>
+                
+                <div class="form-group">
+                    <label for="uploadDomain">Select Domain:</label>
+                    <select id="uploadDomain">
+                        <option value="">-- Select a Domain --</option>
+                    </select>
+                </div>
+                
+                <div id="questionsForm"></div>
+                
+                <button class="secondary" onclick="addQuestion()">➕ Add Question</button>
+                <button onclick="uploadQuestions()">📤 Upload All Questions</button>
+            </div>
+        </div>
+
+        <!-- Take Test Tab -->
+        <div id="takeTest" class="tab-content">
+            <div class="card">
+                <h2>Take a Test</h2>
+                <div id="testError" class="error hidden"></div>
+                
+                <div class="form-group">
+                    <label for="testDomain">Select Domain:</label>
+                    <select id="testDomain">
+                        <option value="">-- Select a Domain --</option>
+                    </select>
+                </div>
+                
+                <button onclick="startTest()">Start Test</button>
+            </div>
+
+            <div id="testInterface" class="hidden">
+                <div class="card">
+                    <h2>🧪 Test in Progress</h2>
+                    <div id="questionsContainer"></div>
+                    <div style="margin-top: 30px;">
+                        <button onclick="submitTest()">✅ Submit Test</button>
+                        <button class="secondary" onclick="cancelTest()">❌ Cancel</button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="testResults" class="hidden"></div>
+        </div>
+
+        <!-- Test History Tab -->
+        <div id="testHistory" class="tab-content">
+            <div class="card">
+                <h2>Your Test History</h2>
+                <div id="historyContainer"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:3000/api';
+        let token = localStorage.getItem('token');
+        let currentUser = null;
+        let currentTest = { questions: [], domainId: null };
+        let questionCount = 0;
+
+        // Check authentication
+        async function checkAuth() {
+            if (!token) {
+                window.location.href = 'index.html';
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_BASE}/auth/me`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    currentUser = data.user;
+
+                    if (currentUser.user_type !== 'faculty') {
+                        alert('Access denied. This dashboard is for faculty only.');
+                        logout();
+                        return;
+                    }
+
+                    document.getElementById('userName').textContent = currentUser.full_name;
+                    await loadDomains();
+                    addQuestion(); // Add first question by default
+                } else {
+                    logout();
+                }
+            } catch (error) {
+                console.error('Auth error:', error);
+                logout();
+            }
+        }
+
+        // Load domains
+        async function loadDomains() {
+            try {
+                const response = await fetch(`${API_BASE}/domains`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                const data = await response.json();
+                
+                const uploadSelect = document.getElementById('uploadDomain');
+                const testSelect = document.getElementById('testDomain');
+                
+                uploadSelect.innerHTML = '<option value="">-- Select a Domain --</option>';
+                testSelect.innerHTML = '<option value="">-- Select a Domain --</option>';
+                
+                data.domains.forEach(domain => {
+                    uploadSelect.innerHTML += `<option value="${domain.domain_id}">${domain.domain_name}</option>`;
+                    testSelect.innerHTML += `<option value="${domain.domain_id}">${domain.domain_name}</option>`;
+                });
+            } catch (error) {
+                console.error('Error loading domains:', error);
+            }
+        }
+
+        // Switch tabs
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            
+            event.target.classList.add('active');
+            document.getElementById(tabName).classList.add('active');
+            
+            if (tabName === 'testHistory') {
+                loadTestHistory();
+            }
+        }
+
+        // Add question
+        function addQuestion() {
+            questionCount++;
+            const form = document.getElementById('questionsForm');
+            
+            const div = document.createElement('div');
+            div.className = 'question-input';
+            div.id = `question-${questionCount}`;
+            div.innerHTML = `
+                <button class="remove-question" onclick="removeQuestion(${questionCount})">✕ Remove</button>
+                <h3>Question ${questionCount}</h3>
+                <label>Question Text:</label>
+                <textarea rows="3" placeholder="Enter your question..." required></textarea>
+                
+                <label>Option A:</label>
+                <input type="text" placeholder="Option A" required>
+                
+                <label>Option B:</label>
+                <input type="text" placeholder="Option B" required>
+                
+                <label>Option C (Optional):</label>
+                <input type="text" placeholder="Option C">
+                
+                <label>Option D (Optional):</label>
+                <input type="text" placeholder="Option D">
+                
+                <label>Correct Answer:</label>
+                <select required>
+                    <option value="">-- Select Correct Answer --</option>
+                    <option value="A">A</option>
+                    <option value="B">B</option>
+                    <option value="C">C</option>
+                    <option value="D">D</option>
+                </select>
+            `;
+            form.appendChild(div);
+        }
+
+        // Remove question
+        function removeQuestion(id) {
+            const element = document.getElementById(`question-${id}`);
+            if (element) {
+                element.remove();
+            }
+        }
+
+        // Upload questions
+        async function uploadQuestions() {
+            const domainId = document.getElementById('uploadDomain').value;
+            const form = document.getElementById('questionsForm');
+            
+            if (!domainId) {
+                showError('uploadError', 'Please select a domain');
+                return;
+            }
+            
+            const questionDivs = form.querySelectorAll('.question-input');
+            
+            if (questionDivs.length === 0) {
+                showError('uploadError', 'Please add at least one question');
+                return;
+            }
+
+            const questions = [];
+            
+            for (const div of questionDivs) {
+                const inputs = div.querySelectorAll('input, textarea, select');
+                const question = {
+                    question_text: inputs[0].value.trim(),
+                    option_a: inputs[1].value.trim(),
+                    option_b: inputs[2].value.trim(),
+                    option_c: inputs[3].value.trim(),
+                    option_d: inputs[4].value.trim(),
+                    correct_option: inputs[5].value
+                };
+
+                if (!question.question_text || !question.option_a || !question.option_b || !question.correct_option) {
+                    showError('uploadError', 'Please fill all required fields (Question, Option A, Option B, Correct Answer)');
+                    return;
+                }
+
+                questions.push(question);
+            }
+
+            hideError('uploadError');
+
+            try {
+                const response = await fetch(`${API_BASE}/questions/upload`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({ domain_id: domainId, questions })
+                });
+
+                const result = await response.json();
+                
+                if (response.ok) {
+                    showSuccess('uploadSuccess', `✅ Successfully uploaded ${result.total_questions} questions!`);
+                    
+                    // Clear form
+                    form.innerHTML = '';
+                    questionCount = 0;
+                    addQuestion();
+                    document.getElementById('uploadDomain').value = '';
+                } else {
+                    showError('uploadError', result.error || 'Upload failed');
+                }
+            } catch (error) {
+                console.error('Error uploading questions:', error);
+                showError('uploadError', 'Network error. Please try again.');
+            }
+        }
+
+        // Start test
+        async function startTest() {
+            const domainId = document.getElementById('testDomain').value;
+            
+            if (!domainId) {
+                showError('testError', 'Please select a domain');
+                return;
+            }
+
+            hideError('testError');
+
+            try {
+                const response = await fetch(`${API_BASE}/questions/${domainId}`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+
+                if (!response.ok) {
+                    const error = await response.json();
+                    showError('testError', error.error || 'Failed to load questions');
+                    return;
+                }
+
+                const data = await response.json();
+                
+                if (data.questions && data.questions.length > 0) {
+                    currentTest = { questions: data.questions, domainId };
+                    displayQuestions();
+                    document.getElementById('testInterface').classList.remove('hidden');
+                    document.getElementById('testInterface').scrollIntoView({ behavior: 'smooth' });
+                } else {
+                    showError('testError', 'No questions available for this domain');
+                }
+            } catch (error) {
+                console.error('Error loading questions:', error);
+                showError('testError', 'Network error. Please try again.');
+            }
+        }
+
+        // Display questions
+        function displayQuestions() {
+            const container = document.getElementById('questionsContainer');
+            container.innerHTML = '';
+            
+            currentTest.questions.forEach((q, index) => {
+                const div = document.createElement('div');
+                div.className = 'question-card';
+                div.innerHTML = `
+                    <h3>Question ${index + 1} of ${currentTest.questions.length}</h3>
+                    <p><strong>${q.question_text}</strong></p>
+                    <div class="options">
+                        ${q.options.map(opt => `
+                            <label class="option">
+                                <input type="radio" name="q${index}" value="${opt.key}">
+                                <span><strong>${opt.key}.</strong> ${opt.value}</span>
+                            </label>
+                        `).join('')}
+                    </div>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        // Submit test
+        async function submitTest() {
+            const answers = currentTest.questions.map((q, index) => {
+                const selected = document.querySelector(`input[name="q${index}"]:checked`);
+                return {
+                    question_id: q.question_id,
+                    selected_option: selected ? selected.value : ''
+                };
+            });
+
+            const unanswered = answers.filter(a => !a.selected_option).length;
+            
+            if (unanswered > 0) {
+                if (!confirm(`You have ${unanswered} unanswered question(s). Submit anyway?`)) {
+                    return;
+                }
+            }
+
+            try {
+                const response = await fetch(`${API_BASE}/tests/submit`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({
+                        domain_id: currentTest.domainId,
+                        answers
+                    })
+                });
+
+                const result = await response.json();
+                
+                if (response.ok) {
+                    displayResults(result);
+                    await loadTestHistory();
+                } else {
+                    alert(result.error || 'Error submitting test');
+                }
+            } catch (error) {
+                console.error('Error submitting test:', error);
+                alert('Network error. Please try again.');
+            }
+        }
+
+        // Display results
+        function displayResults(result) {
+            document.getElementById('testInterface').classList.add('hidden');
+            
+            const resultsDiv = document.getElementById('testResults');
+            resultsDiv.innerHTML = `
+                <div class="result-card">
+                    <h2>🎉 Test Completed!</h2>
+                    <div class="score">${result.percentage}%</div>
+                    <div style="font-size: 1.2rem;">
+                        <p><strong>Score:</strong> ${result.score}/${result.total_questions}</p>
+                    </div>
+                    <button onclick="resetTest()" style="margin-top: 20px;">Take Another Test</button>
+                </div>
+            `;
+            resultsDiv.classList.remove('hidden');
+            resultsDiv.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Cancel test
+        function cancelTest() {
+            if (confirm('Cancel test? All progress will be lost.')) {
+                resetTest();
+            }
+        }
+
+        // Reset test
+        function resetTest() {
+            document.getElementById('testInterface').classList.add('hidden');
+            document.getElementById('testResults').classList.add('hidden');
+            document.getElementById('testDomain').value = '';
+            currentTest = { questions: [], domainId: null };
+        }
+
+        // Load test history
+        async function loadTestHistory() {
+            const container = document.getElementById('historyContainer');
+            container.innerHTML = '<div style="text-align: center; padding: 20px; color: #999;">Loading...</div>';
+
+            try {
+                const response = await fetch(`${API_BASE}/tests/history`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                const data = await response.json();
+                
+                if (data.tests && data.tests.length > 0) {
+                    container.innerHTML = data.tests.map(test => `
+                        <div class="test-item">
+                            <p><strong>Domain:</strong> ${test.domain_name}</p>
+                            <p><strong>Date:</strong> ${new Date(test.test_date).toLocaleString()}</p>
+                            <p><strong>Score:</strong> ${test.score}/${test.total_questions} (${test.percentage}%)</p>
+                        </div>
+                    `).join('');
+                } else {
+                    container.innerHTML = `
+                        <div class="empty-state">
+                            <h3>No Tests Yet</h3>
+                            <p>You haven't taken any tests yet.</p>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                console.error('Error loading history:', error);
+                container.innerHTML = '<div class="error">Error loading test history.</div>';
+            }
+        }
+
+        // Utility functions
+        function showError(elementId, message) {
+            const el = document.getElementById(elementId);
+            el.textContent = message;
+            el.classList.remove('hidden');
+            setTimeout(() => el.classList.add('hidden'), 5000);
+        }
+
+        function hideError(elementId) {
+            document.getElementById(elementId).classList.add('hidden');
+        }
+
+        function showSuccess(elementId, message) {
+            const el = document.getElementById(elementId);
+            el.textContent = message;
+            el.classList.remove('hidden');
+            setTimeout(() => el.classList.add('hidden'), 5000);
+        }
+
+        // Logout
+        function logout() {
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            window.location.href = 'index.html';
+        }
+
+        // Initialize
+        window.onload = checkAuth;
+    </script>
+</body>
+</html>
