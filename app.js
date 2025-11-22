@@ -40,8 +40,8 @@ app.use((req, res, next) => {
   next();
 });
 
-// Serve static files from the current directory
-app.use(express.static(__dirname));
+// FIXED: Serve static files from the 'public' directory
+app.use(express.static(path.join(__dirname, 'public')));
 
 // Database connection
 const db = createClient({
@@ -88,51 +88,37 @@ function requireRole(...roles) {
 // AUTHENTICATION ROUTES
 // ========================================
 
-// Serve landing page
+// FIXED: Serve HTML pages without authentication middleware
 app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, 'index.html'));
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-// Serve login page
 app.get("/login.html", (req, res) => {
-  res.sendFile(path.join(__dirname, 'login.html'));
+  res.sendFile(path.join(__dirname, 'public', 'login.html'));
 });
 
-// Serve signup page
 app.get("/signup.html", (req, res) => {
-  res.sendFile(path.join(__dirname, 'signup.html'));
+  res.sendFile(path.join(__dirname, 'public', 'signup.html'));
 });
 
-// Serve forgot password page
 app.get("/forgot-password.html", (req, res) => {
-  res.sendFile(path.join(__dirname, 'forgot-password.html'));
+  res.sendFile(path.join(__dirname, 'public', 'forgot-password.html'));
 });
 
-// Serve reset password page
 app.get("/reset-password.html", (req, res) => {
-  res.sendFile(path.join(__dirname, 'reset-password.html'));
+  res.sendFile(path.join(__dirname, 'public', 'reset-password.html'));
 });
 
-// Serve dashboard pages
-app.get("/student-dashboard.html", authenticateToken, (req, res) => {
-  if (req.user.user_type !== 'student') {
-    return res.status(403).json({ error: 'Access denied' });
-  }
-  res.sendFile(path.join(__dirname, 'student-dashboard.html'));
+app.get("/student-dashboard.html", (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'student-dashboard.html'));
 });
 
-app.get("/faculty-dashboard.html", authenticateToken, (req, res) => {
-  if (req.user.user_type !== 'faculty') {
-    return res.status(403).json({ error: 'Access denied' });
-  }
-  res.sendFile(path.join(__dirname, 'faculty-dashboard.html'));
+app.get("/faculty-dashboard.html", (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'faculty-dashboard.html'));
 });
 
-app.get("/admin-dashboard.html", authenticateToken, (req, res) => {
-  if (req.user.user_type !== 'admin') {
-    return res.status(403).json({ error: 'Access denied' });
-  }
-  res.sendFile(path.join(__dirname, 'admin-dashboard.html'));
+app.get("/admin-dashboard.html", (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'admin-dashboard.html'));
 });
 
 // Sign up
@@ -953,5 +939,5 @@ app.listen(PORT, () => {
   console.log(`🔐 Authentication enabled with JWT`);
   console.log(`🔄 Password reset: Simple token system`);
   console.log(`📊 Database connected to Turso`);
-  console.log(`📄 Serving static files from: ${__dirname}`);
+  console.log(`📄 Serving static files from: ${path.join(__dirname, 'public')}`);
 });
