@@ -21,18 +21,27 @@ BigInt.prototype.toJSON = function() {
 const app = express();
 app.use(bodyParser.json());
 
-// CORS configuration
+// CORS configuration - Updated for separate frontend
 app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', '*');
+  const allowedOrigins = ['http://localhost:3000', 'http://127.0.0.1:3000', 'http://localhost:5500', 'http://127.0.0.1:5500'];
+  const origin = req.headers.origin;
+  
+  if (allowedOrigins.includes(origin)) {
+    res.header('Access-Control-Allow-Origin', origin);
+  }
+  
   res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With');
+  res.header('Access-Control-Allow-Credentials', 'true');
+  
   if (req.method === 'OPTIONS') {
     return res.sendStatus(200);
   }
   next();
 });
 
-app.use(express.static(path.join(__dirname, 'public')));
+// Serve static files from the current directory
+app.use(express.static(__dirname));
 
 // Database connection
 const db = createClient({
@@ -78,6 +87,53 @@ function requireRole(...roles) {
 // ========================================
 // AUTHENTICATION ROUTES
 // ========================================
+
+// Serve landing page
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, 'index.html'));
+});
+
+// Serve login page
+app.get("/login.html", (req, res) => {
+  res.sendFile(path.join(__dirname, 'login.html'));
+});
+
+// Serve signup page
+app.get("/signup.html", (req, res) => {
+  res.sendFile(path.join(__dirname, 'signup.html'));
+});
+
+// Serve forgot password page
+app.get("/forgot-password.html", (req, res) => {
+  res.sendFile(path.join(__dirname, 'forgot-password.html'));
+});
+
+// Serve reset password page
+app.get("/reset-password.html", (req, res) => {
+  res.sendFile(path.join(__dirname, 'reset-password.html'));
+});
+
+// Serve dashboard pages
+app.get("/student-dashboard.html", authenticateToken, (req, res) => {
+  if (req.user.user_type !== 'student') {
+    return res.status(403).json({ error: 'Access denied' });
+  }
+  res.sendFile(path.join(__dirname, 'student-dashboard.html'));
+});
+
+app.get("/faculty-dashboard.html", authenticateToken, (req, res) => {
+  if (req.user.user_type !== 'faculty') {
+    return res.status(403).json({ error: 'Access denied' });
+  }
+  res.sendFile(path.join(__dirname, 'faculty-dashboard.html'));
+});
+
+app.get("/admin-dashboard.html", authenticateToken, (req, res) => {
+  if (req.user.user_type !== 'admin') {
+    return res.status(403).json({ error: 'Access denied' });
+  }
+  res.sendFile(path.join(__dirname, 'admin-dashboard.html'));
+});
 
 // Sign up
 app.post("/api/auth/signup", async (req, res) => {
@@ -401,7 +457,7 @@ app.post("/api/auth/reset-password", async (req, res) => {
 
     res.json({ 
       message: 'Password reset successfully',
-      redirect_url: '/index.html'
+      redirect_url: '/login.html'
     });
 
   } catch (error) {
@@ -897,4 +953,5 @@ app.listen(PORT, () => {
   console.log(`🔐 Authentication enabled with JWT`);
   console.log(`🔄 Password reset: Simple token system`);
   console.log(`📊 Database connected to Turso`);
+  console.log(`📄 Serving static files from: ${__dirname}`);
 });

@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MCQ Platform - Login</title>
+    <title>SkillProbe - Technical Assessment Platform</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -11,591 +12,385 @@
             box-sizing: border-box;
         }
 
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --primary-light: #818cf8;
+            --secondary: #8b5cf6;
+            --accent: #ec4899;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --dark: #1e293b;
+            --dark-light: #334155;
+            --gray: #64748b;
+            --light: #f1f5f9;
+            --white: #ffffff;
+            --shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            --shadow-lg: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
             min-height: 100vh;
+            color: var(--dark);
+            line-height: 1.6;
+        }
+
+        /* Navigation */
+        .navbar {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem 0;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 20px;
-        }
-
-        .auth-container {
-            max-width: 450px;
-            width: 100%;
-            background: white;
-            padding: 40px;
-            border-radius: 15px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
-        }
-
-        h1 {
-            text-align: center;
-            color: #333;
-            margin-bottom: 10px;
-            font-size: 2rem;
-        }
-
-        .subtitle {
-            text-align: center;
-            color: #666;
-            margin-bottom: 30px;
-            font-size: 0.95rem;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: #555;
-            font-size: 0.9rem;
-        }
-
-        input, select {
-            width: 100%;
-            padding: 12px 15px;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
-            font-size: 15px;
-            transition: border-color 0.3s;
-            box-sizing: border-box;
-        }
-
-        input:focus, select:focus {
-            outline: none;
-            border-color: #667eea;
-        }
-
-        button {
-            width: 100%;
-            padding: 14px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 16px;
+            font-size: 1.5rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--dark);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 10px;
             font-weight: 600;
             cursor: pointer;
-            transition: transform 0.2s;
+            transition: all 0.3s;
+            border: none;
+            font-size: 0.95rem;
+            text-decoration: none;
+            display: inline-block;
         }
 
-        button:hover {
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+        }
+
+        .btn-primary:hover {
             transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4);
         }
 
-        button:active {
-            transform: translateY(0);
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
         }
 
-        .google-btn {
+        .btn-outline:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* Hero Section */
+        .hero {
+            max-width: 1200px;
+            margin: 4rem auto;
+            padding: 0 2rem;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            color: white;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+            text-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            color: rgba(255, 255, 255, 0.95);
+            margin-bottom: 2.5rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        /* Features Grid */
+        .features {
+            max-width: 1200px;
+            margin: 5rem auto;
+            padding: 0 2rem;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: white;
+            margin-bottom: 3rem;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .feature-card {
             background: white;
-            color: #333;
-            border: 2px solid #e0e0e0;
+            padding: 2.5rem;
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 15px;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 10px;
-            transition: all 0.3s;
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
         }
 
-        .google-btn:hover {
-            background: #f8f9fa;
-            border-color: #667eea;
-            transform: translateY(-2px);
+        .feature-card h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--dark);
         }
 
-        .toggle-link {
-            text-align: center;
-            margin-top: 20px;
-            color: #666;
-            font-size: 0.9rem;
+        .feature-card p {
+            color: var(--gray);
+            line-height: 1.8;
         }
 
-        .toggle-link a {
-            color: #667eea;
+        /* Footer */
+        .footer {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 3rem 2rem;
+            margin-top: 5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+        }
+
+        .footer-section h3 {
+            color: white;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .footer-section p,
+        .footer-section a {
+            color: rgba(255, 255, 255, 0.8);
             text-decoration: none;
-            font-weight: 600;
+            display: block;
+            margin-bottom: 0.5rem;
         }
 
-        .toggle-link a:hover {
-            text-decoration: underline;
+        .footer-section a:hover {
+            color: white;
         }
 
-        .error {
-            background: #f8d7da;
-            color: #721c24;
-            padding: 12px;
-            border-radius: 8px;
-            margin-bottom: 15px;
-            border: 1px solid #f5c6cb;
-            font-size: 0.9rem;
-        }
-
-        .success {
-            background: #d1edff;
-            color: #0c5460;
-            padding: 12px;
-            border-radius: 8px;
-            margin-bottom: 15px;
-            border: 1px solid #bee5eb;
-            font-size: 0.9rem;
-        }
-
-        .hidden {
-            display: none;
-        }
-
-        .loading {
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 3px solid rgba(255,255,255,.3);
-            border-radius: 50%;
-            border-top-color: white;
-            animation: spin 1s ease-in-out infinite;
-        }
-
-        .help-text {
-            font-size: 0.85rem;
-            color: #999;
-            margin-top: 5px;
-        }
-
-        .divider {
+        .footer-bottom {
             text-align: center;
-            margin: 20px 0;
-            color: #666;
-            position: relative;
+            color: rgba(255, 255, 255, 0.8);
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
         }
 
-        .divider::before {
-            content: "";
-            position: absolute;
-            top: 50%;
-            left: 0;
-            right: 0;
-            height: 1px;
-            background: #e0e0e0;
-        }
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
 
-        .divider span {
-            background: white;
-            padding: 0 15px;
-        }
+            .nav-links {
+                display: none;
+            }
 
-        .forgot-password {
-            text-align: right;
-            margin-top: -10px;
-            margin-bottom: 20px;
-        }
-
-        .forgot-password a {
-            color: #667eea;
-            text-decoration: none;
-            font-size: 0.85rem;
-        }
-
-        .forgot-password a:hover {
-            text-decoration: underline;
-        }
-
-        .demo-info {
-            background: #e3f2fd;
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            border-left: 4px solid #2196f3;
-            font-size: 0.85rem;
-            text-align: center;
-        }
-
-        .demo-info strong {
-            color: #1976d2;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
 <body>
-    <!-- Login Form -->
-    <div id="loginForm" class="auth-container">
-        <h1>🎯 MCQ Platform</h1>
-        <p class="subtitle">Sign in to continue</p>
-        
-        <div id="loginError" class="error hidden"></div>
-        
-        <form onsubmit="login(event)">
-            <div class="form-group">
-                <label for="loginUsername">Username</label>
-                <input type="text" id="loginUsername" placeholder="Enter your username" required>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="#" class="logo">
+                <div class="logo-icon">🎯</div>
+                <span>SkillProbe</span>
+            </a>
+            <div class="nav-links">
+                <a href="#features">Features</a>
+                <a href="#about">About</a>
+                <a href="#contact">Contact</a>
+                <a href="login.html" class="btn btn-primary">Login</a>
             </div>
-            
-            <div class="form-group">
-                <label for="loginPassword">Password</label>
-                <input type="password" id="loginPassword" placeholder="Enter your password" required>
-            </div>
-
-            <div class="forgot-password">
-                <a href="#" onclick="showForgotPassword(event)">Forgot password?</a>
-            </div>
-            
-            <button type="submit" id="loginBtn">Login</button>
-        </form>
-
-        <div class="divider"><span>Or continue with</span></div>
-        
-        <button class="google-btn" onclick="googleLogin()">
-            <svg width="18" height="18" viewBox="0 0 24 24">
-                <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-                <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-                <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
-                <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
-            </svg>
-            Continue with Google
-        </button>
-        
-        <div class="toggle-link">
-            Don't have an account? <a href="#" onclick="showSignup(event)">Sign up</a>
         </div>
-    </div>
+    </nav>
 
-    <!-- Signup Form -->
-    <div id="signupForm" class="auth-container hidden">
-        <h1>📝 Create Account</h1>
-        <p class="subtitle">Join the MCQ Platform</p>
-        
-        <div id="signupError" class="error hidden"></div>
-        
-        <form onsubmit="signup(event)">
-            <div class="form-group">
-                <label for="signupUsername">Username</label>
-                <input type="text" id="signupUsername" placeholder="Choose a username" required minlength="3">
-                <p class="help-text">Minimum 3 characters</p>
-            </div>
-            
-            <div class="form-group">
-                <label for="signupFullName">Full Name</label>
-                <input type="text" id="signupFullName" placeholder="Enter your full name" required>
-            </div>
-            
-            <div class="form-group">
-                <label for="signupEmail">Email</label>
-                <input type="email" id="signupEmail" placeholder="Enter your email" required>
-            </div>
-            
-            <div class="form-group">
-                <label for="signupPassword">Password</label>
-                <input type="password" id="signupPassword" placeholder="Create a password" required minlength="6">
-                <p class="help-text">Minimum 6 characters</p>
-            </div>
-            
-            <div class="form-group">
-                <label for="signupUserType">I am a:</label>
-                <select id="signupUserType" required>
-                    <option value="">-- Select Role --</option>
-                    <option value="student">Student - Take tests</option>
-                    <option value="faculty">Faculty - Upload questions & take tests</option>
-                    <option value="admin">Admin - Full system access</option>
-                </select>
-            </div>
-            
-            <button type="submit" id="signupBtn">Create Account</button>
-        </form>
-
-        <div class="divider"><span>Or</span></div>
-        
-        <button class="google-btn" onclick="googleLogin()">
-            <svg width="18" height="18" viewBox="0 0 24 24">
-                <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-                <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-                <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
-                <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
-            </svg>
-            Continue with Google
-        </button>
-        
-        <div class="toggle-link">
-            Already have an account? <a href="#" onclick="showLogin(event)">Login</a>
+    <!-- Hero Section -->
+    <section class="hero">
+        <h1>Master Your Technical Skills</h1>
+        <p>Take comprehensive assessments, track your progress, and prove your expertise with our advanced MCQ platform.</p>
+        <div class="hero-buttons">
+            <a href="login.html" class="btn btn-primary">Get Started</a>
+            <a href="#features" class="btn btn-outline" style="background: rgba(255,255,255,0.2); color: white; border-color: rgba(255,255,255,0.3);">Learn More</a>
         </div>
-    </div>
+    </section>
 
-    <!-- Forgot Password Form -->
-    <div id="forgotPasswordForm" class="auth-container hidden">
-        <h1>🔒 Reset Password</h1>
-        <p class="subtitle">Enter your email to receive a reset link</p>
-        
-        <div id="forgotPasswordError" class="error hidden"></div>
-        <div id="forgotPasswordSuccess" class="success hidden"></div>
-        
-        <form onsubmit="forgotPassword(event)">
-            <div class="form-group">
-                <label for="forgotPasswordEmail">Email</label>
-                <input type="email" id="forgotPasswordEmail" placeholder="Enter your registered email" required>
+    <!-- Features Section -->
+    <section class="features" id="features">
+        <h2 class="section-title">Why Choose SkillProbe?</h2>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">📊</div>
+                <h3>Comprehensive Analytics</h3>
+                <p>Track your progress with detailed performance analytics and insights to identify areas for improvement.</p>
             </div>
-            
-            <button type="submit" id="forgotPasswordBtn">Send Reset Link</button>
-        </form>
-        
-        <div class="toggle-link">
-            Remember your password? <a href="#" onclick="showLogin(event)">Back to Login</a>
+            <div class="feature-card">
+                <div class="feature-icon">🎯</div>
+                <h3>Adaptive Testing</h3>
+                <p>Experience personalized assessments that adapt to your skill level for optimal learning outcomes.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🏆</div>
+                <h3>Instant Results</h3>
+                <p>Get immediate feedback on your performance with detailed explanations for each question.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">📚</div>
+                <h3>Vast Question Bank</h3>
+                <p>Access thousands of carefully curated questions across multiple technical domains and difficulty levels.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">👥</div>
+                <h3>Multi-Role Support</h3>
+                <p>Dedicated interfaces for students, faculty, and administrators with role-specific features.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🔒</div>
+                <h3>Secure & Reliable</h3>
+                <p>Enterprise-grade security with encrypted data storage and secure authentication protocols.</p>
+            </div>
         </div>
-    </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>About SkillProbe</h3>
+                <p>Leading technical assessment platform helping thousands of learners master their skills through comprehensive testing.</p>
+            </div>
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <a href="#">Home</a>
+                <a href="#">Features</a>
+                <a href="#">About Us</a>
+            </div>
+            <div class="footer-section">
+                <h3>Support</h3>
+                <a href="#">Help Center</a>
+                <a href="#">Contact Us</a>
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Service</a>
+            </div>
+            <div class="footer-section">
+                <h3>Connect</h3>
+                <a href="#">Twitter</a>
+                <a href="#">LinkedIn</a>
+                <a href="#">GitHub</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 SkillProbe. All rights reserved.</p>
+        </div>
+    </footer>
 
     <script>
-        const API_BASE = 'http://localhost:3000/api';
-
-        // Show/Hide Forms
-        function showLogin(e) {
-            if (e) e.preventDefault();
-            document.getElementById('loginForm').classList.remove('hidden');
-            document.getElementById('signupForm').classList.add('hidden');
-            document.getElementById('forgotPasswordForm').classList.add('hidden');
-            clearErrors();
-        }
-
-        function showSignup(e) {
-            if (e) e.preventDefault();
-            document.getElementById('loginForm').classList.add('hidden');
-            document.getElementById('signupForm').classList.remove('hidden');
-            document.getElementById('forgotPasswordForm').classList.add('hidden');
-            clearErrors();
-        }
-
-        function showForgotPassword(e) {
-            if (e) e.preventDefault();
-            document.getElementById('loginForm').classList.add('hidden');
-            document.getElementById('signupForm').classList.add('hidden');
-            document.getElementById('forgotPasswordForm').classList.remove('hidden');
-            clearErrors();
-        }
-
-        function clearErrors() {
-            document.getElementById('loginError').classList.add('hidden');
-            document.getElementById('signupError').classList.add('hidden');
-            document.getElementById('forgotPasswordError').classList.add('hidden');
-            document.getElementById('forgotPasswordSuccess').classList.add('hidden');
-        }
-
-        // Updated Google Login function
-        function googleLogin() {
-            const email = prompt("Enter your Google email:");
-            
-            if (!email) return;
-
-            const btn = document.querySelector('.google-btn');
-            const originalText = btn.innerHTML;
-            btn.innerHTML = '<span class="loading"></span>';
-            btn.disabled = true;
-
-            console.log('Attempting Google login with:', { email });
-
-            fetch(`${API_BASE}/auth/google`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ 
-                    email, 
-                    name: email.split('@')[0], // Use email prefix as name
-                    googleId: 'google_' + btoa(email).replace(/[^a-zA-Z0-9]/g, '').substring(0, 16)
-                })
-            })
-            .then(response => {
-                if (!response.ok) {
-                    return response.json().then(errorData => {
-                        throw new Error(errorData.error || `HTTP error! status: ${response.status}`);
+        // Smooth scrolling
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
                     });
                 }
-                return response.json();
-            })
-            .then(data => {
-                if (data.token) {
-                    console.log('Google login successful:', data);
-                    localStorage.setItem('token', data.token);
-                    localStorage.setItem('user', JSON.stringify(data.user));
-                    redirectToDashboard(data.user.user_type);
-                } else {
-                    throw new Error(data.error || 'No token received');
-                }
-            })
-            .catch(error => {
-                console.error('Google login error:', error);
-                alert('Google login failed: ' + error.message);
-                btn.innerHTML = originalText;
-                btn.disabled = false;
             });
-        }
-
-        // Forgot Password
-        async function forgotPassword(e) {
-            e.preventDefault();
-            
-            const email = document.getElementById('forgotPasswordEmail').value.trim();
-            const btn = document.getElementById('forgotPasswordBtn');
-
-            if (!email) {
-                showError('forgotPasswordError', 'Please enter your email');
-                return;
-            }
-
-            btn.disabled = true;
-            const originalText = btn.innerHTML;
-            btn.innerHTML = '<span class="loading"></span>';
-
-            try {
-                const response = await fetch(`${API_BASE}/auth/forgot-password`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ email })
-                });
-
-                const data = await response.json();
-
-                if (response.ok) {
-                    showSuccess('forgotPasswordSuccess', 
-                        'Password reset instructions have been sent to your email.'
-                    );
-                } else {
-                    showError('forgotPasswordError', data.error || 'Failed to send reset instructions');
-                }
-            } catch (error) {
-                console.error('Forgot password error:', error);
-                showError('forgotPasswordError', 'Network error. Please try again.');
-            } finally {
-                btn.disabled = false;
-                btn.innerHTML = originalText;
-            }
-        }
-
-        // Login
-        async function login(e) {
-            e.preventDefault();
-            
-            const username = document.getElementById('loginUsername').value.trim();
-            const password = document.getElementById('loginPassword').value;
-            const btn = document.getElementById('loginBtn');
-
-            if (!username || !password) {
-                showError('loginError', 'Please fill in all fields');
-                return;
-            }
-
-            btn.disabled = true;
-            const originalText = btn.innerHTML;
-            btn.innerHTML = '<span class="loading"></span>';
-
-            try {
-                const response = await fetch(`${API_BASE}/auth/login`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ username, password })
-                });
-
-                const data = await response.json();
-
-                if (response.ok) {
-                    localStorage.setItem('token', data.token);
-                    localStorage.setItem('user', JSON.stringify(data.user));
-                    redirectToDashboard(data.user.user_type);
-                } else {
-                    showError('loginError', data.error || 'Login failed');
-                    btn.disabled = false;
-                    btn.innerHTML = originalText;
-                }
-            } catch (error) {
-                console.error('Login error:', error);
-                showError('loginError', 'Network error. Please check if the server is running.');
-                btn.disabled = false;
-                btn.innerHTML = originalText;
-            }
-        }
-
-        // Signup
-        async function signup(e) {
-            e.preventDefault();
-            
-            const username = document.getElementById('signupUsername').value.trim();
-            const full_name = document.getElementById('signupFullName').value.trim();
-            const email = document.getElementById('signupEmail').value.trim();
-            const password = document.getElementById('signupPassword').value;
-            const user_type = document.getElementById('signupUserType').value;
-            const btn = document.getElementById('signupBtn');
-
-            if (!username || !full_name || !email || !password || !user_type) {
-                showError('signupError', 'Please fill in all fields');
-                return;
-            }
-
-            if (username.length < 3) {
-                showError('signupError', 'Username must be at least 3 characters');
-                return;
-            }
-
-            if (password.length < 6) {
-                showError('signupError', 'Password must be at least 6 characters');
-                return;
-            }
-
-            btn.disabled = true;
-            const originalText = btn.innerHTML;
-            btn.innerHTML = '<span class="loading"></span>';
-
-            try {
-                const response = await fetch(`${API_BASE}/auth/signup`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ username, full_name, email, password, user_type })
-                });
-
-                const data = await response.json();
-
-                if (response.ok) {
-                    localStorage.setItem('token', data.token);
-                    localStorage.setItem('user', JSON.stringify(data.user));
-                    redirectToDashboard(data.user.user_type);
-                } else {
-                    showError('signupError', data.error || 'Signup failed');
-                    btn.disabled = false;
-                    btn.innerHTML = originalText;
-                }
-            } catch (error) {
-                console.error('Signup error:', error);
-                showError('signupError', 'Network error. Please check if the server is running.');
-                btn.disabled = false;
-                btn.innerHTML = originalText;
-            }
-        }
-
-        // Redirect to appropriate dashboard
-        function redirectToDashboard(userType) {
-            if (userType === 'student') {
-                window.location.href = 'student-dashboard.html';
-            } else if (userType === 'faculty') {
-                window.location.href = 'faculty-dashboard.html';
-            } else if (userType === 'admin') {
-                window.location.href = 'admin-dashboard.html';
-            }
-        }
-
-        // Show error message
-        function showError(elementId, message) {
-            const el = document.getElementById(elementId);
-            el.textContent = message;
-            el.classList.remove('hidden');
-            setTimeout(() => el.classList.add('hidden'), 5000);
-        }
-
-        function showSuccess(elementId, message) {
-            const el = document.getElementById(elementId);
-            el.textContent = message;
-            el.classList.remove('hidden');
-            setTimeout(() => el.classList.add('hidden'), 10000);
-        }
+        });
 
         // Check if already logged in
         window.onload = function() {
@@ -607,6 +402,16 @@
                 redirectToDashboard(userData.user_type);
             }
         };
+
+        function redirectToDashboard(userType) {
+            if (userType === 'student') {
+                window.location.href = 'student-dashboard.html';
+            } else if (userType === 'faculty') {
+                window.location.href = 'faculty-dashboard.html';
+            } else if (userType === 'admin') {
+                window.location.href = 'admin-dashboard.html';
+            }
+        }
     </script>
 </body>
 </html>

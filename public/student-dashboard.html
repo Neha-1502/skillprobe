@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Student Dashboard - MCQ Platform</title>
+    <title>Student Dashboard - SkillProbe</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -11,85 +12,242 @@
             box-sizing: border-box;
         }
 
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --primary-light: #818cf8;
+            --secondary: #8b5cf6;
+            --accent: #ec4899;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --dark: #1e293b;
+            --dark-light: #334155;
+            --gray: #64748b;
+            --light: #f1f5f9;
+            --white: #ffffff;
+            --shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: #f5f7fa;
-            min-height: 100vh;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: var(--light);
+            color: var(--dark);
+            line-height: 1.6;
         }
 
-        .container {
-            max-width: 1200px;
+        /* Navigation */
+        .navbar {
+            background: white;
+            padding: 1rem 0;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-container {
+            max-width: 1400px;
             margin: 0 auto;
-            padding: 20px;
-        }
-
-        .header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 25px;
-            border-radius: 15px;
-            margin-bottom: 30px;
+            padding: 0 2rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
         }
 
-        .header h1 {
-            font-size: 1.8rem;
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--primary);
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+        }
+
+        .user-section {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
         }
 
         .user-info {
+            text-align: right;
+        }
+
+        .user-name {
+            font-weight: 700;
+            color: var(--dark);
+            font-size: 0.95rem;
+        }
+
+        .user-role {
+            font-size: 0.85rem;
+            color: var(--gray);
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+            font-size: 0.95rem;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4);
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #dc2626;
+        }
+
+        .btn-outline {
+            background: white;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+        }
+
+        .btn-outline:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* Dashboard Container */
+        .dashboard-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Welcome Section */
+        .welcome-section {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 3rem;
+            border-radius: 20px;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .welcome-title {
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+        }
+
+        .welcome-subtitle {
+            opacity: 0.95;
+            font-size: 1.1rem;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .stat-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
             display: flex;
             align-items: center;
-            gap: 15px;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
         }
 
-        .user-badge {
-            background: rgba(255,255,255,0.2);
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-size: 0.9rem;
+        .stat-icon-1 { background: linear-gradient(135deg, #667eea, #764ba2); }
+        .stat-icon-2 { background: linear-gradient(135deg, #f093fb, #f5576c); }
+        .stat-icon-3 { background: linear-gradient(135deg, #4facfe, #00f2fe); }
+        .stat-icon-4 { background: linear-gradient(135deg, #fa709a, #fee140); }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--dark);
+            margin-bottom: 0.25rem;
         }
 
-        .logout-btn {
-            padding: 10px 20px;
-            background: #dc3545;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: background 0.3s;
+        .stat-label {
+            color: var(--gray);
+            font-size: 0.95rem;
+            font-weight: 500;
         }
 
-        .logout-btn:hover {
-            background: #c82333;
-        }
-
+        /* Tabs */
         .tabs {
             display: flex;
-            gap: 10px;
-            margin-bottom: 30px;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            background: white;
+            padding: 0.75rem;
+            border-radius: 15px;
+            box-shadow: var(--shadow);
         }
 
         .tab {
             flex: 1;
-            padding: 15px 20px;
-            background: white;
-            border: 2px solid #e0e0e0;
+            padding: 1rem 1.5rem;
+            background: transparent;
+            border: none;
             border-radius: 10px;
             cursor: pointer;
             transition: all 0.3s;
             text-align: center;
             font-weight: 600;
-            color: #555;
+            color: var(--gray);
+            font-size: 0.95rem;
         }
 
         .tab.active {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
             color: white;
-            border-color: transparent;
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
         }
 
         .tab-content {
@@ -100,303 +258,513 @@
             display: block;
         }
 
+        /* Card */
         .card {
             background: white;
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            margin-bottom: 20px;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            margin-bottom: 2rem;
         }
 
-        .card h2 {
-            color: #333;
-            margin-bottom: 20px;
-            font-size: 1.5rem;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: #555;
-        }
-
-        select {
-            width: 100%;
-            padding: 12px 15px;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
-            font-size: 15px;
-            transition: border-color 0.3s;
-        }
-
-        select:focus {
-            outline: none;
-            border-color: #667eea;
-        }
-
-        button {
-            padding: 12px 30px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: transform 0.2s;
-        }
-
-        button:hover {
-            transform: translateY(-2px);
-        }
-
-        button.secondary {
-            background: #6c757d;
-            margin-left: 10px;
-        }
-
-        .question-card {
-            background: #f8f9fa;
-            padding: 25px;
-            margin: 20px 0;
-            border-radius: 10px;
-            border-left: 4px solid #667eea;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-        }
-
-        .question-card h3 {
-            color: #667eea;
-            margin-bottom: 15px;
-        }
-
-        .question-card p {
-            font-size: 1.1rem;
-            margin-bottom: 20px;
-            color: #333;
-        }
-
-        .options {
+        .card-header {
             display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .option {
-            padding: 15px;
-            background: white;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.2s;
-            display: flex;
+            justify-content: space-between;
             align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--light);
         }
 
-        .option:hover {
-            border-color: #667eea;
-            background: #f0f4ff;
+        .card-title {
+            font-size: 1.75rem;
+            font-weight: 800;
+            color: var(--dark);
         }
 
-        .option input[type="radio"] {
-            margin-right: 12px;
-            width: 18px;
-            height: 18px;
-            cursor: pointer;
+        /* Form */
+        .form-group {
+            margin-bottom: 1.5rem;
         }
 
-        .result-card {
-            background: linear-gradient(135deg, #28a745, #20c997);
-            color: white;
-            padding: 50px;
-            border-radius: 15px;
-            text-align: center;
-            box-shadow: 0 5px 25px rgba(40, 167, 69, 0.4);
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--dark);
+            font-size: 0.95rem;
         }
 
-        .result-card h2 {
-            color: white;
-            font-size: 2rem;
-            margin-bottom: 20px;
+        .form-control {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: all 0.3s;
+            font-family: inherit;
         }
 
-        .score {
-            font-size: 5rem;
-            font-weight: bold;
-            margin: 30px 0;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
         }
 
-        .result-details {
-            font-size: 1.2rem;
-            margin: 20px 0;
-        }
-
-        .test-item {
-            background: white;
-            padding: 20px;
-            margin: 15px 0;
-            border-radius: 10px;
-            border-left: 4px solid #667eea;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-        }
-
-        .test-item strong {
-            color: #667eea;
-        }
-
-        .test-item p {
-            margin: 8px 0;
-            color: #555;
-        }
-
-        .empty-state {
-            text-align: center;
-            padding: 60px 20px;
-            color: #999;
-        }
-
-        .empty-state h3 {
-            font-size: 1.5rem;
-            margin-bottom: 10px;
-        }
-
-        .hidden {
-            display: none;
-        }
-
-        .loading {
-            text-align: center;
-            padding: 40px;
-            color: #999;
-        }
-
-        .error {
-            background: #f8d7da;
-            color: #721c24;
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            border: 1px solid #f5c6cb;
-        }
-
-        .success {
-            background: #d4edda;
-            color: #155724;
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            border: 1px solid #c3e6cb;
-        }
-
+        /* Test Config */
         .test-config {
-            background: #f8f9fa;
-            padding: 20px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            border-left: 4px solid #667eea;
-        }
-
-        .test-config h3 {
-            color: #667eea;
-            margin-bottom: 15px;
+            background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+            padding: 2rem;
+            border-radius: 15px;
+            margin-bottom: 2rem;
+            border-left: 4px solid var(--primary);
         }
 
         .config-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 15px;
+            gap: 1.5rem;
         }
 
+        /* Question Card */
+        .question-card {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 2px solid var(--light);
+            transition: all 0.3s;
+        }
+
+        .question-card:hover {
+            border-color: var(--primary);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .question-number {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 10px;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+        }
+
+        .question-text {
+            font-size: 1.15rem;
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .option {
+            padding: 1.25rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .option:hover {
+            border-color: var(--primary);
+            background: #f8fafc;
+        }
+
+        .option.selected {
+            border-color: var(--primary);
+            background: #eef2ff;
+        }
+
+        .option input[type="radio"] {
+            width: 20px;
+            height: 20px;
+            accent-color: var(--primary);
+        }
+
+        .option-label {
+            font-weight: 700;
+            color: var(--primary);
+            min-width: 30px;
+        }
+
+        .option-text {
+            flex: 1;
+            color: var(--dark);
+        }
+
+        /* Result Card */
+        .result-card {
+            background: linear-gradient(135deg, var(--success), #059669);
+            color: white;
+            text-align: center;
+            padding: 4rem 2rem;
+            border-radius: 25px;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .result-icon {
+            font-size: 5rem;
+            margin-bottom: 1rem;
+        }
+
+        .result-score {
+            font-size: 5rem;
+            font-weight: 800;
+            margin: 1.5rem 0;
+            text-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .result-details {
+            font-size: 1.2rem;
+            opacity: 0.95;
+            margin-bottom: 2rem;
+        }
+
+        .result-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .result-stat {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 1.5rem;
+            border-radius: 15px;
+        }
+
+        .result-stat-value {
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: 0.25rem;
+        }
+
+        .result-stat-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        /* Test History */
+        .history-grid {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .history-item {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 15px;
+            border: 2px solid var(--light);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s;
+        }
+
+        .history-item:hover {
+            border-color: var(--primary);
+            box-shadow: var(--shadow);
+            transform: translateX(5px);
+        }
+
+        .history-info h4 {
+            color: var(--dark);
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .history-meta {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        .history-score {
+            text-align: right;
+        }
+
+        .score-badge {
+            display: inline-block;
+            padding: 0.75rem 1.25rem;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .score-excellent { background: #d1fae5; color: #065f46; }
+        .score-good { background: #dbeafe; color: #1e40af; }
+        .score-average { background: #fef3c7; color: #92400e; }
+        .score-poor { background: #fee2e2; color: #991b1b; }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: var(--gray);
+        }
+
+        .empty-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+        .empty-state h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: var(--dark);
+        }
+
+        /* Alert */
+        .alert {
+            padding: 1rem 1.25rem;
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
+            font-weight: 500;
+        }
+
+        .alert-success {
+            background: #d1fae5;
+            color: #065f46;
+            border: 1px solid #6ee7b7;
+        }
+
+        .alert-error {
+            background: #fee2e2;
+            color: #991b1b;
+            border: 1px solid #fca5a5;
+        }
+
+        .alert-info {
+            background: #dbeafe;
+            color: #1e40af;
+            border: 1px solid #93c5fd;
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            margin-bottom: 2rem;
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background: #e2e8f0;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            transition: width 0.3s;
+            border-radius: 10px;
+        }
+
+        /* Loading Spinner */
+        .loading {
+            text-align: center;
+            padding: 3rem;
+            color: var(--gray);
+        }
+
+        .spinner {
+            border: 3px solid var(--light);
+            border-radius: 50%;
+            border-top: 3px solid var(--primary);
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* Responsive */
         @media (max-width: 768px) {
-            .header {
-                flex-direction: column;
-                gap: 15px;
+            .dashboard-container {
+                padding: 1rem;
+            }
+
+            .welcome-section {
+                padding: 2rem;
+            }
+
+            .welcome-title {
+                font-size: 1.5rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
             }
 
             .tabs {
                 flex-direction: column;
             }
 
-            .score {
-                font-size: 3rem;
-            }
-
             .config-grid {
                 grid-template-columns: 1fr;
+            }
+
+            .history-item {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+
+            .result-score {
+                font-size: 3.5rem;
             }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <!-- Header -->
-        <div class="header">
-            <div>
-                <h1>👨‍🎓 Student Dashboard</h1>
-                <div class="user-badge" id="userName"></div>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <div class="logo-icon">🎯</div>
+                <span>SkillProbe</span>
             </div>
-            <button class="logout-btn" onclick="logout()">Logout</button>
+            <div class="user-section">
+                <div class="user-info">
+                    <div class="user-name" id="userName">Loading...</div>
+                    <div class="user-role">Student</div>
+                </div>
+                <button class="btn btn-danger" onclick="logout()">Logout</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Dashboard Container -->
+    <div class="dashboard-container">
+        <!-- Welcome Section -->
+        <div class="welcome-section">
+            <h1 class="welcome-title">Welcome back, <span id="userWelcome">Student</span>! 👋</h1>
+            <p class="welcome-subtitle">Ready to test your skills today? Your learning journey continues here.</p>
+        </div>
+
+        <!-- Stats Grid -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon stat-icon-1">📝</div>
+                <div class="stat-value" id="totalTests">0</div>
+                <div class="stat-label">Tests Taken</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon stat-icon-2">🎯</div>
+                <div class="stat-value" id="avgScore">0%</div>
+                <div class="stat-label">Average Score</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon stat-icon-3">⭐</div>
+                <div class="stat-value" id="bestScore">0%</div>
+                <div class="stat-label">Best Score</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon stat-icon-4">📈</div>
+                <div class="stat-value" id="totalQuestions">0</div>
+                <div class="stat-label">Questions Answered</div>
+            </div>
         </div>
 
         <!-- Tabs -->
         <div class="tabs">
-            <div class="tab active" onclick="switchTab('takeTest')">📝 Take Test</div>
-            <div class="tab" onclick="switchTab('testHistory')">📋 Test History</div>
+            <button class="tab active" onclick="switchTab('takeTest')">📝 Take Test</button>
+            <button class="tab" onclick="switchTab('testHistory')">📋 Test History</button>
+            <button class="tab" onclick="switchTab('performance')">📊 Performance Analytics</button>
         </div>
 
         <!-- Take Test Tab -->
         <div id="takeTest" class="tab-content active">
             <div class="card">
-                <h2>Start New Test</h2>
-                <div id="startError" class="error hidden"></div>
+                <div class="card-header">
+                    <h2 class="card-title">Start New Test</h2>
+                </div>
+                
+                <div id="startError" class="alert alert-error hidden"></div>
                 
                 <div class="test-config">
-                    <h3>Test Configuration</h3>
                     <div class="config-grid">
                         <div class="form-group">
-                            <label for="domainSelect">Select Domain:</label>
-                            <select id="domainSelect" onchange="loadQuestionSets()">
-                                <option value="">-- Select a Domain --</option>
+                            <label for="domainSelect">📚 Select Domain</label>
+                            <select id="domainSelect" class="form-control" onchange="loadQuestionSets()">
+                                <option value="">-- Choose a domain --</option>
                             </select>
                         </div>
                         
                         <div class="form-group" id="questionSetGroup" style="display: none;">
-                            <label for="questionSet">Question Set:</label>
-                            <select id="questionSet">
+                            <label for="questionSet">📑 Question Set</label>
+                            <select id="questionSet" class="form-control">
                                 <option value="all">All Questions (Mixed)</option>
                             </select>
                         </div>
                         
                         <div class="form-group">
-                            <label for="questionLimit">Number of Questions:</label>
-                            <select id="questionLimit">
+                            <label for="questionLimit">🔢 Number of Questions</label>
+                            <select id="questionLimit" class="form-control">
                                 <option value="5">5 Questions</option>
                                 <option value="10" selected>10 Questions</option>
                                 <option value="15">15 Questions</option>
                                 <option value="20">20 Questions</option>
-                                <option value="25">25 Questions</option>
                             </select>
                         </div>
                     </div>
                 </div>
                 
-                <button onclick="startTest()">Start Test</button>
+                <button class="btn btn-primary" onclick="startTest()">Start Test 🚀</button>
             </div>
 
             <!-- Test Interface -->
             <div id="testInterface" class="hidden">
                 <div class="card">
-                    <h2>🧪 Test in Progress</h2>
-                    <p style="color: #666; margin-bottom: 20px;">Answer all questions and click Submit when done.</p>
+                    <div class="card-header">
+                        <h2 class="card-title">Test in Progress 🧪</h2>
+                    </div>
+                    
+                    <div class="progress-container">
+                        <div class="progress-header">
+                            <span>Progress</span>
+                            <span id="progressText">0/0</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+                        </div>
+                    </div>
+                    
                     <div id="questionsContainer"></div>
-                    <div style="margin-top: 30px;">
-                        <button onclick="submitTest()">✅ Submit Test</button>
-                        <button class="secondary" onclick="cancelTest()">❌ Cancel</button>
+                    
+                    <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+                        <button class="btn btn-primary" onclick="submitTest()" style="flex: 1;">✅ Submit Test</button>
+                        <button class="btn btn-outline" onclick="cancelTest()">❌ Cancel</button>
                     </div>
                 </div>
             </div>
@@ -408,8 +776,25 @@
         <!-- Test History Tab -->
         <div id="testHistory" class="tab-content">
             <div class="card">
-                <h2>Your Test History</h2>
+                <div class="card-header">
+                    <h2 class="card-title">Your Test History</h2>
+                </div>
                 <div id="historyContainer"></div>
+            </div>
+        </div>
+
+        <!-- Performance Analytics Tab -->
+        <div id="performance" class="tab-content">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">Performance Analytics</h2>
+                </div>
+                <div id="performanceContainer">
+                    <div class="loading">
+                        <div class="spinner"></div>
+                        <p>Loading your performance data...</p>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -419,11 +804,12 @@
         let token = localStorage.getItem('token');
         let currentUser = null;
         let currentTest = { questions: [], domainId: null };
+        let answeredQuestions = new Set();
 
         // Check authentication
         async function checkAuth() {
             if (!token) {
-                window.location.href = 'index.html';
+                window.location.href = 'login.html';
                 return;
             }
 
@@ -436,7 +822,6 @@
                     const data = await response.json();
                     currentUser = data.user;
 
-                    // Check if user is a student
                     if (currentUser.user_type !== 'student') {
                         alert('Access denied. This dashboard is for students only.');
                         logout();
@@ -444,8 +829,10 @@
                     }
 
                     document.getElementById('userName').textContent = currentUser.full_name;
+                    document.getElementById('userWelcome').textContent = currentUser.full_name.split(' ')[0];
                     await loadDomains();
                     await loadTestHistory();
+                    await loadStats();
                 } else {
                     logout();
                 }
@@ -464,7 +851,7 @@
                 const data = await response.json();
                 
                 const select = document.getElementById('domainSelect');
-                select.innerHTML = '<option value="">-- Select a Domain --</option>';
+                select.innerHTML = '<option value="">-- Choose a domain --</option>';
                 
                 data.domains.forEach(domain => {
                     select.innerHTML += `<option value="${domain.domain_id}">${domain.domain_name}</option>`;
@@ -474,7 +861,7 @@
             }
         }
 
-        // Load question sets when domain is selected
+        // Load question sets
         async function loadQuestionSets() {
             const domainId = document.getElementById('domainSelect').value;
             const setGroup = document.getElementById('questionSetGroup');
@@ -509,6 +896,30 @@
             }
         }
 
+        // Load stats
+        async function loadStats() {
+            try {
+                const response = await fetch(`${API_BASE}/tests/history`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                const data = await response.json();
+                
+                if (data.tests && data.tests.length > 0) {
+                    const totalTests = data.tests.length;
+                    const avgScore = (data.tests.reduce((sum, t) => sum + parseFloat(t.percentage), 0) / totalTests).toFixed(1);
+                    const bestScore = Math.max(...data.tests.map(t => parseFloat(t.percentage))).toFixed(1);
+                    const totalQuestions = data.tests.reduce((sum, t) => sum + t.total_questions, 0);
+                    
+                    document.getElementById('totalTests').textContent = totalTests;
+                    document.getElementById('avgScore').textContent = avgScore + '%';
+                    document.getElementById('bestScore').textContent = bestScore + '%';
+                    document.getElementById('totalQuestions').textContent = totalQuestions;
+                }
+            } catch (error) {
+                console.error('Error loading stats:', error);
+            }
+        }
+
         // Switch tabs
         function switchTab(tabName) {
             document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
@@ -519,6 +930,8 @@
             
             if (tabName === 'testHistory') {
                 loadTestHistory();
+            } else if (tabName === 'performance') {
+                loadPerformance();
             }
         }
 
@@ -555,6 +968,7 @@
                 
                 if (data.questions && data.questions.length > 0) {
                     currentTest = { questions: data.questions, domainId };
+                    answeredQuestions.clear();
                     displayQuestions();
                     document.getElementById('testInterface').classList.remove('hidden');
                     document.getElementById('testInterface').scrollIntoView({ behavior: 'smooth' });
@@ -576,19 +990,41 @@
                 const div = document.createElement('div');
                 div.className = 'question-card';
                 div.innerHTML = `
-                    <h3>Question ${index + 1} of ${currentTest.questions.length}</h3>
-                    <p><strong>${q.question_text}</strong></p>
+                    <div class="question-number">Question ${index + 1} of ${currentTest.questions.length}</div>
+                    <div class="question-text">${q.question_text}</div>
                     <div class="options">
                         ${q.options.map(opt => `
-                            <label class="option">
+                            <label class="option" onclick="selectOption(this, ${index})">
                                 <input type="radio" name="q${index}" value="${opt.key}">
-                                <span><strong>${opt.key}.</strong> ${opt.value}</span>
+                                <span class="option-label">${opt.key}.</span>
+                                <span class="option-text">${opt.value}</span>
                             </label>
                         `).join('')}
                     </div>
                 `;
                 container.appendChild(div);
             });
+            
+            updateProgress();
+        }
+
+        // Select option
+        function selectOption(element, questionIndex) {
+            const questionCard = element.closest('.question-card');
+            questionCard.querySelectorAll('.option').forEach(opt => opt.classList.remove('selected'));
+            element.classList.add('selected');
+            answeredQuestions.add(questionIndex);
+            updateProgress();
+        }
+
+        // Update progress
+        function updateProgress() {
+            const total = currentTest.questions.length;
+            const answered = answeredQuestions.size;
+            const percentage = (answered / total) * 100;
+            
+            document.getElementById('progressText').textContent = `${answered}/${total}`;
+            document.getElementById('progressFill').style.width = `${percentage}%`;
         }
 
         // Submit test
@@ -627,6 +1063,7 @@
                 if (response.ok) {
                     displayResults(result);
                     await loadTestHistory();
+                    await loadStats();
                 } else {
                     alert(result.error || 'Error submitting test');
                 }
@@ -640,17 +1077,51 @@
         function displayResults(result) {
             document.getElementById('testInterface').classList.add('hidden');
             
+            const percentage = parseFloat(result.percentage);
+            let resultClass = 'result-card';
+            let emoji = '🎉';
+            let message = 'Congratulations!';
+            
+            if (percentage >= 80) {
+                emoji = '🏆';
+                message = 'Excellent Work!';
+            } else if (percentage >= 60) {
+                emoji = '🎯';
+                message = 'Great Job!';
+            } else if (percentage >= 40) {
+                emoji = '👍';
+                message = 'Good Effort!';
+            } else {
+                emoji = '📚';
+                message = 'Keep Learning!';
+            }
+            
             const resultsDiv = document.getElementById('testResults');
             resultsDiv.innerHTML = `
-                <div class="result-card">
-                    <h2>🎉 Test Completed!</h2>
-                    <div class="score">${result.percentage}%</div>
-                    <div class="result-details">
-                        <p><strong>Score:</strong> ${result.score} out of ${result.total_questions}</p>
-                        <p><strong>Correct Answers:</strong> ${result.score}</p>
-                        <p><strong>Wrong Answers:</strong> ${result.total_questions - result.score}</p>
+                <div class="${resultClass}">
+                    <div class="result-icon">${emoji}</div>
+                    <h2>${message}</h2>
+                    <div class="result-score">${percentage}%</div>
+                    
+                    <div class="result-grid">
+                        <div class="result-stat">
+                            <div class="result-stat-value">${result.score}</div>
+                            <div class="result-stat-label">Correct</div>
+                        </div>
+                        <div class="result-stat">
+                            <div class="result-stat-value">${result.total_questions - result.score}</div>
+                            <div class="result-stat-label">Wrong</div>
+                        </div>
+                        <div class="result-stat">
+                            <div class="result-stat-value">${result.total_questions}</div>
+                            <div class="result-stat-label">Total</div>
+                        </div>
                     </div>
-                    <button onclick="resetTest()" style="margin-top: 20px;">Take Another Test</button>
+                    
+                    <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                        <button onclick="resetTest()" class="btn btn-primary">Take Another Test</button>
+                        <button onclick="viewTestDetails(${result.test_id})" class="btn btn-outline" style="background: rgba(255,255,255,0.2); color: white; border-color: rgba(255,255,255,0.3);">View Details</button>
+                    </div>
                 </div>
             `;
             resultsDiv.classList.remove('hidden');
@@ -659,7 +1130,7 @@
 
         // Cancel test
         function cancelTest() {
-            if (confirm('Are you sure you want to cancel? All progress will be lost.')) {
+            if (confirm('Cancel test? All progress will be lost.')) {
                 resetTest();
             }
         }
@@ -671,13 +1142,14 @@
             document.getElementById('domainSelect').value = '';
             document.getElementById('questionSetGroup').style.display = 'none';
             currentTest = { questions: [], domainId: null };
+            answeredQuestions.clear();
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         // Load test history
         async function loadTestHistory() {
             const container = document.getElementById('historyContainer');
-            container.innerHTML = '<div class="loading">Loading test history...</div>';
+            container.innerHTML = '<div class="loading"><div class="spinner"></div><p>Loading history...</p></div>';
 
             try {
                 const response = await fetch(`${API_BASE}/tests/history`, {
@@ -686,32 +1158,157 @@
                 const data = await response.json();
                 
                 if (data.tests && data.tests.length > 0) {
-                    container.innerHTML = data.tests.map(test => `
-                        <div class="test-item">
-                            <p><strong>Domain:</strong> ${test.domain_name}</p>
-                            <p><strong>Date:</strong> ${new Date(test.test_date).toLocaleString()}</p>
-                            <p><strong>Score:</strong> ${test.score}/${test.total_questions} (${test.percentage}%)</p>
-                            <p><strong>Status:</strong> ${test.percentage >= 70 ? '✅ Passed' : '❌ Needs Improvement'}</p>
-                            <button onclick="viewTestDetails(${test.test_id})" style="margin-top: 10px; padding: 8px 16px; background: #667eea; color: white; border: none; border-radius: 5px; cursor: pointer;">
-                                View Details
-                            </button>
+                    container.innerHTML = `
+                        <div class="history-grid">
+                            ${data.tests.map(test => {
+                                const percentage = parseFloat(test.percentage);
+                                let scoreClass = percentage >= 80 ? 'score-excellent' : 
+                                               percentage >= 60 ? 'score-good' : 
+                                               percentage >= 40 ? 'score-average' : 'score-poor';
+                                
+                                return `
+                                    <div class="history-item">
+                                        <div class="history-info">
+                                            <h4>${test.domain_name}</h4>
+                                            <div class="history-meta">
+                                                📅 ${new Date(test.test_date).toLocaleDateString()} • 
+                                                🕒 ${new Date(test.test_date).toLocaleTimeString()}
+                                            </div>
+                                        </div>
+                                        <div class="history-score">
+                                            <div class="score-badge ${scoreClass}">
+                                                ${test.percentage}%
+                                            </div>
+                                            <div style="color: var(--gray); font-size: 0.9rem;">
+                                                ${test.score}/${test.total_questions} correct
+                                            </div>
+                                            <button onclick="viewTestDetails(${test.test_id})" class="btn btn-outline" style="margin-top: 0.5rem; padding: 0.5rem 1rem; font-size: 0.85rem;">
+                                                View Details
+                                            </button>
+                                        </div>
+                                    </div>
+                                `;
+                            }).join('')}
                         </div>
-                    `).join('');
+                    `;
                 } else {
                     container.innerHTML = `
                         <div class="empty-state">
+                            <div class="empty-icon">📝</div>
                             <h3>No Tests Yet</h3>
-                            <p>You haven't taken any tests. Start by taking your first test!</p>
+                            <p>You haven't taken any tests. Start your first test now!</p>
                         </div>
                     `;
                 }
             } catch (error) {
                 console.error('Error loading history:', error);
-                container.innerHTML = '<div class="error">Error loading test history. Please try again.</div>';
+                container.innerHTML = '<div class="alert alert-error">Error loading test history.</div>';
             }
         }
 
-        // View test details
+        // Load performance analytics
+        async function loadPerformance() {
+            const container = document.getElementById('performanceContainer');
+            
+            try {
+                const response = await fetch(`${API_BASE}/tests/history`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                const data = await response.json();
+                
+                if (data.tests && data.tests.length > 0) {
+                    // Group by domain
+                    const domainStats = {};
+                    data.tests.forEach(test => {
+                        if (!domainStats[test.domain_name]) {
+                            domainStats[test.domain_name] = {
+                                tests: 0,
+                                totalScore: 0,
+                                totalQuestions: 0,
+                                correctAnswers: 0
+                            };
+                        }
+                        domainStats[test.domain_name].tests++;
+                        domainStats[test.domain_name].totalScore += parseFloat(test.percentage);
+                        domainStats[test.domain_name].totalQuestions += test.total_questions;
+                        domainStats[test.domain_name].correctAnswers += test.score;
+                    });
+                    
+                    container.innerHTML = `
+                        <div style="margin-bottom: 2rem;">
+                            <h3 style="margin-bottom: 1rem; color: var(--dark);">Domain-wise Performance</h3>
+                            <div style="display: grid; gap: 1rem;">
+                                ${Object.entries(domainStats).map(([domain, stats]) => {
+                                    const avgScore = (stats.totalScore / stats.tests).toFixed(1);
+                                    const accuracy = ((stats.correctAnswers / stats.totalQuestions) * 100).toFixed(1);
+                                    
+                                    return `
+                                        <div style="background: white; padding: 1.5rem; border-radius: 15px; border: 2px solid var(--light);">
+                                            <h4 style="color: var(--primary); margin-bottom: 1rem;">${domain}</h4>
+                                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 1rem;">
+                                                <div>
+                                                    <div style="font-size: 1.75rem; font-weight: 800; color: var(--dark);">${stats.tests}</div>
+                                                    <div style="color: var(--gray); font-size: 0.9rem;">Tests Taken</div>
+                                                </div>
+                                                <div>
+                                                    <div style="font-size: 1.75rem; font-weight: 800; color: var(--dark);">${avgScore}%</div>
+                                                    <div style="color: var(--gray); font-size: 0.9rem;">Avg Score</div>
+                                                </div>
+                                                <div>
+                                                    <div style="font-size: 1.75rem; font-weight: 800; color: var(--dark);">${accuracy}%</div>
+                                                    <div style="color: var(--gray); font-size: 0.9rem;">Accuracy</div>
+                                                </div>
+                                                <div>
+                                                    <div style="font-size: 1.75rem; font-weight: 800; color: var(--dark);">${stats.correctAnswers}/${stats.totalQuestions}</div>
+                                                    <div style="color: var(--gray); font-size: 0.9rem;">Questions</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    `;
+                                }).join('')}
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <h3 style="margin-bottom: 1rem; color: var(--dark);">Recent Progress</h3>
+                            <div style="background: white; padding: 1.5rem; border-radius: 15px; border: 2px solid var(--light);">
+                                ${data.tests.slice(0, 10).map(test => `
+                                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 1rem 0; border-bottom: 1px solid var(--light);">
+                                        <div>
+                                            <strong style="color: var(--dark);">${test.domain_name}</strong>
+                                            <div style="color: var(--gray); font-size: 0.85rem;">
+                                                ${new Date(test.test_date).toLocaleDateString()}
+                                            </div>
+                                        </div>
+                                        <div style="text-align: right;">
+                                            <div style="font-size: 1.25rem; font-weight: 700; color: ${test.percentage >= 70 ? 'var(--success)' : 'var(--warning)'};">
+                                                ${test.percentage}%
+                                            </div>
+                                            <div style="color: var(--gray); font-size: 0.85rem;">
+                                                ${test.score}/${test.total_questions}
+                                            </div>
+                                        </div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    container.innerHTML = `
+                        <div class="empty-state">
+                            <div class="empty-icon">📊</div>
+                            <h3>No Performance Data</h3>
+                            <p>Take some tests to see your performance analytics here.</p>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                console.error('Error loading performance:', error);
+                container.innerHTML = '<div class="alert alert-error">Error loading performance data.</div>';
+            }
+        }
+
+        // View test details - FIXED FUNCTIONALITY
         async function viewTestDetails(testId) {
             try {
                 const response = await fetch(`${API_BASE}/tests/${testId}`, {
@@ -730,7 +1327,7 @@
             }
         }
 
-        // Show test details modal
+        // Show test details modal - FIXED WITH CORRECT/INCORRECT VIEW
         function showTestDetailsModal(testData) {
             const modal = document.createElement('div');
             modal.style.cssText = `
@@ -745,13 +1342,14 @@
                 align-items: center;
                 z-index: 1000;
                 padding: 20px;
+                overflow-y: auto;
             `;
             
             const modalContent = document.createElement('div');
             modalContent.style.cssText = `
                 background: white;
-                padding: 30px;
-                border-radius: 15px;
+                padding: 2rem;
+                border-radius: 20px;
                 max-width: 800px;
                 width: 100%;
                 max-height: 90vh;
@@ -766,44 +1364,62 @@
                 const correctAnswer = q.correct_option;
                 
                 questionsHtml += `
-                    <div class="question-card" style="border-left-color: ${isCorrect ? '#28a745' : '#dc3545'};">
-                        <h3>Question ${index + 1} ${isCorrect ? '✅' : '❌'}</h3>
-                        <p><strong>${q.question_text}</strong></p>
+                    <div class="question-card" style="border-left-color: ${isCorrect ? 'var(--success)' : 'var(--danger)'}; margin-bottom: 2rem;">
+                        <div class="question-number" style="background: ${isCorrect ? 'var(--success)' : 'var(--danger)'};">Question ${index + 1} ${isCorrect ? '✅' : '❌'}</div>
+                        <div class="question-text">${q.question_text}</div>
                         <div class="options">
                             ${['A', 'B', 'C', 'D'].map(opt => {
                                 const optionValue = q[`option_${opt.toLowerCase()}`];
                                 if (!optionValue) return '';
                                 
-                                let optionClass = '';
+                                let optionStyle = 'border: 2px solid #e2e8f0;';
+                                let badge = '';
+                                
                                 if (opt === correctAnswer) {
-                                    optionClass = 'background: #d4edda; border-color: #28a745;';
+                                    optionStyle = 'border: 2px solid var(--success); background: #d1fae5;';
+                                    badge = '<span style="color: var(--success); margin-left: auto; font-weight: 700;">✓ Correct Answer</span>';
                                 } else if (opt === userAnswer && !isCorrect) {
-                                    optionClass = 'background: #f8d7da; border-color: #dc3545;';
+                                    optionStyle = 'border: 2px solid var(--danger); background: #fee2e2;';
+                                    badge = '<span style="color: var(--danger); margin-left: auto; font-weight: 700;">✗ Your Answer</span>';
+                                } else if (opt === userAnswer && isCorrect) {
+                                    optionStyle = 'border: 2px solid var(--success); background: #d1fae5;';
+                                    badge = '<span style="color: var(--success); margin-left: auto; font-weight: 700;">✓ Your Answer</span>';
                                 }
                                 
                                 return `
-                                    <div class="option" style="${optionClass}">
-                                        <span><strong>${opt}.</strong> ${optionValue}</span>
-                                        ${opt === correctAnswer ? '<span style="color: #28a745; margin-left: auto;">✓ Correct</span>' : ''}
-                                        ${opt === userAnswer && !isCorrect ? '<span style="color: #dc3545; margin-left: auto;">✗ Your Answer</span>' : ''}
+                                    <div style="padding: 1rem; border-radius: 12px; ${optionStyle} display: flex; align-items: center; gap: 1rem; margin-bottom: 0.5rem;">
+                                        <span style="font-weight: 700; color: var(--primary); min-width: 30px;">${opt}.</span>
+                                        <span style="flex: 1;">${optionValue}</span>
+                                        ${badge}
                                     </div>
                                 `;
                             }).join('')}
                         </div>
+                        ${!isCorrect ? `
+                            <div style="margin-top: 1rem; padding: 1rem; background: #fef3c7; border-radius: 8px; border-left: 4px solid var(--warning);">
+                                <strong>Explanation:</strong> The correct answer was <strong>${correctAnswer}</strong>, but you selected <strong>${userAnswer || 'Nothing'}</strong>
+                            </div>
+                        ` : ''}
                     </div>
                 `;
             });
             
             modalContent.innerHTML = `
-                <h2>Test Details - ${testData.test.domain_name}</h2>
-                <p><strong>Date:</strong> ${new Date(testData.test.test_date).toLocaleString()}</p>
-                <p><strong>Score:</strong> ${testData.test.score}/${testData.test.total_questions} (${testData.test.percentage}%)</p>
-                <div style="margin: 20px 0;">
-                    <button onclick="this.closest('div').parentElement.remove()" style="position: absolute; top: 15px; right: 15px; background: #dc3545; color: white; border: none; padding: 8px 12px; border-radius: 5px; cursor: pointer;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+                    <div>
+                        <h2 style="color: var(--dark); margin-bottom: 0.5rem;">Test Details - ${testData.test.domain_name}</h2>
+                        <p style="color: var(--gray);">
+                            📅 ${new Date(testData.test.test_date).toLocaleString()} • 
+                            Score: ${testData.test.score}/${testData.test.total_questions} (${testData.test.percentage}%)
+                        </p>
+                    </div>
+                    <button onclick="this.closest('div').parentElement.parentElement.remove()" 
+                            style="background: var(--danger); color: white; border: none; padding: 0.75rem 1.25rem; 
+                                   border-radius: 10px; cursor: pointer; font-weight: 600;">
                         Close
                     </button>
                 </div>
-                <div style="margin-top: 20px;">
+                <div>
                     ${questionsHtml}
                 </div>
             `;
@@ -811,7 +1427,6 @@
             modal.appendChild(modalContent);
             document.body.appendChild(modal);
             
-            // Close modal when clicking outside
             modal.addEventListener('click', (e) => {
                 if (e.target === modal) {
                     modal.remove();
@@ -834,7 +1449,7 @@
         function logout() {
             localStorage.removeItem('token');
             localStorage.removeItem('user');
-            window.location.href = 'index.html';
+            window.location.href = 'login.html';
         }
 
         // Initialize

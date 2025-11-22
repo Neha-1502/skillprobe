@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Faculty Dashboard - MCQ Platform</title>
+    <title>Faculty Dashboard - SkillProbe</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -11,79 +12,218 @@
             box-sizing: border-box;
         }
 
+        :root {
+            --primary: #8b5cf6;
+            --secondary: #7c3aed;
+            --accent: #ec4899;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --dark: #1e293b;
+            --gray: #64748b;
+            --light: #f1f5f9;
+            --shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: #f5f7fa;
-            min-height: 100vh;
+            font-family: 'Inter', sans-serif;
+            background: var(--light);
+            color: var(--dark);
+            line-height: 1.6;
         }
 
-        .container {
-            max-width: 1200px;
+        .navbar {
+            background: white;
+            padding: 1rem 0;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-container {
+            max-width: 1400px;
             margin: 0 auto;
-            padding: 20px;
-        }
-
-        .header {
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-            color: white;
-            padding: 25px;
-            border-radius: 15px;
-            margin-bottom: 30px;
+            padding: 0 2rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
         }
 
-        .header h1 {
-            font-size: 1.8rem;
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--primary);
         }
 
-        .user-badge {
-            background: rgba(255,255,255,0.2);
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-size: 0.9rem;
-        }
-
-        .logout-btn {
-            padding: 10px 20px;
-            background: #dc3545;
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             color: white;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: background 0.3s;
+            font-size: 1.5rem;
         }
 
-        .logout-btn:hover {
-            background: #c82333;
+        .user-section {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .user-info {
+            text-align: right;
+        }
+
+        .user-name {
+            font-weight: 700;
+            color: var(--dark);
+            font-size: 0.95rem;
+        }
+
+        .user-role {
+            font-size: 0.85rem;
+            color: var(--gray);
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+            font-size: 0.95rem;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(139, 92, 246, 0.4);
+        }
+
+        .btn-secondary {
+            background: var(--gray);
+            color: white;
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+        }
+
+        .dashboard-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .welcome-section {
+            background: linear-gradient(135deg, #a78bfa, #7c3aed);
+            color: white;
+            padding: 3rem;
+            border-radius: 20px;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .welcome-title {
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .stat-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--dark);
+            margin-bottom: 0.25rem;
+        }
+
+        .stat-label {
+            color: var(--gray);
+            font-size: 0.95rem;
+            font-weight: 500;
         }
 
         .tabs {
             display: flex;
-            gap: 10px;
-            margin-bottom: 30px;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            background: white;
+            padding: 0.75rem;
+            border-radius: 15px;
+            box-shadow: var(--shadow);
         }
 
         .tab {
             flex: 1;
-            padding: 15px 20px;
-            background: white;
-            border: 2px solid #e0e0e0;
+            padding: 1rem 1.5rem;
+            background: transparent;
+            border: none;
             border-radius: 10px;
             cursor: pointer;
             transition: all 0.3s;
             text-align: center;
             font-weight: 600;
-            color: #555;
+            color: var(--gray);
+            font-size: 0.95rem;
         }
 
         .tab.active {
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
             color: white;
-            border-color: transparent;
+            box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
         }
 
         .tab-content {
@@ -96,216 +236,105 @@
 
         .card {
             background: white;
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            margin-bottom: 20px;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            margin-bottom: 2rem;
         }
 
-        .card h2 {
-            color: #333;
-            margin-bottom: 20px;
-            font-size: 1.5rem;
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--light);
+        }
+
+        .card-title {
+            font-size: 1.75rem;
+            font-weight: 800;
+            color: var(--dark);
         }
 
         .form-group {
-            margin-bottom: 20px;
+            margin-bottom: 1.5rem;
         }
 
-        label {
+        .form-group label {
             display: block;
-            margin-bottom: 8px;
+            margin-bottom: 0.5rem;
             font-weight: 600;
-            color: #555;
+            color: var(--dark);
+            font-size: 0.95rem;
         }
 
-        input, select, textarea {
+        .form-control {
             width: 100%;
-            padding: 12px 15px;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
-            font-size: 15px;
-            transition: border-color 0.3s;
+            padding: 1rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: all 0.3s;
             font-family: inherit;
         }
 
-        input:focus, select:focus, textarea:focus {
+        .form-control:focus {
             outline: none;
-            border-color: #f5576c;
-        }
-
-        button {
-            padding: 12px 30px;
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: transform 0.2s;
-        }
-
-        button:hover {
-            transform: translateY(-2px);
-        }
-
-        button.secondary {
-            background: #6c757d;
-            margin-right: 10px;
-        }
-
-        button.danger {
-            background: #dc3545;
-            margin-left: 10px;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
         }
 
         .question-input {
-            background: #f8f9fa;
-            padding: 25px;
-            margin: 20px 0;
-            border-radius: 10px;
-            border-left: 4px solid #f5576c;
+            background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+            padding: 2rem;
+            margin: 1.5rem 0;
+            border-radius: 15px;
+            border-left: 4px solid var(--primary);
             position: relative;
         }
 
         .question-input h3 {
-            color: #f5576c;
-            margin-bottom: 15px;
-        }
-
-        .question-input textarea,
-        .question-input input,
-        .question-input select {
-            margin-bottom: 12px;
+            color: var(--primary);
+            margin-bottom: 1rem;
+            font-size: 1.25rem;
         }
 
         .remove-question {
             position: absolute;
-            top: 20px;
-            right: 20px;
-            background: #dc3545;
+            top: 1.5rem;
+            right: 1.5rem;
+            background: var(--danger);
             color: white;
             border: none;
-            padding: 5px 12px;
-            border-radius: 5px;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
             cursor: pointer;
+            font-weight: 600;
             font-size: 0.85rem;
         }
 
-        .test-item {
-            background: white;
-            padding: 20px;
-            margin: 15px 0;
-            border-radius: 10px;
-            border-left: 4px solid #f5576c;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-        }
-
-        .success {
-            background: #d4edda;
-            color: #155724;
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            border: 1px solid #c3e6cb;
-        }
-
-        .error {
-            background: #f8d7da;
-            color: #721c24;
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            border: 1px solid #f5c6cb;
-        }
-
-        .hidden {
-            display: none;
-        }
-
-        .empty-state {
-            text-align: center;
-            padding: 60px 20px;
-            color: #999;
-        }
-
-        .question-card {
-            background: #f8f9fa;
-            padding: 25px;
-            margin: 20px 0;
-            border-radius: 10px;
-            border-left: 4px solid #f5576c;
-        }
-
-        .question-card h3 {
-            color: #f5576c;
-            margin-bottom: 15px;
-        }
-
-        .options {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .option {
-            padding: 15px;
-            background: white;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.2s;
-            display: flex;
-            align-items: center;
-        }
-
-        .option:hover {
-            border-color: #f5576c;
-            background: #fff5f7;
-        }
-
-        .option input[type="radio"] {
-            margin-right: 12px;
-            width: 18px;
-            height: 18px;
-        }
-
-        .result-card {
-            background: linear-gradient(135deg, #28a745, #20c997);
-            color: white;
-            padding: 50px;
-            border-radius: 15px;
-            text-align: center;
-            box-shadow: 0 5px 25px rgba(40, 167, 69, 0.4);
-        }
-
-        .score {
-            font-size: 5rem;
-            font-weight: bold;
-            margin: 30px 0;
-        }
-
         .student-report-card {
-            background: #f8f9fa;
-            padding: 20px;
-            margin: 15px 0;
-            border-radius: 10px;
-            border-left: 4px solid #f5576c;
+            background: white;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            border-radius: 12px;
+            border-left: 4px solid var(--primary);
+            box-shadow: var(--shadow);
         }
 
         .student-report-card h4 {
-            color: #f5576c;
-            margin-bottom: 10px;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
         }
 
         .report-summary {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-            margin: 15px 0;
-            padding: 15px;
-            background: white;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin: 1rem 0;
+            padding: 1rem;
+            background: var(--light);
             border-radius: 8px;
         }
 
@@ -314,61 +343,102 @@
         }
 
         .report-stat h3 {
-            font-size: 2rem;
-            color: #f5576c;
-            margin: 5px 0;
+            font-size: 1.75rem;
+            color: var(--primary);
+            margin: 0.25rem 0;
         }
 
         .report-stat p {
-            color: #666;
-            font-size: 0.9rem;
-        }
-
-        .test-details {
-            margin-top: 15px;
+            color: var(--gray);
+            font-size: 0.85rem;
         }
 
         .test-detail-item {
             background: white;
-            padding: 15px;
-            margin: 8px 0;
+            padding: 1rem;
+            margin: 0.5rem 0;
             border-radius: 8px;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            border: 1px solid var(--light);
         }
 
         .score-badge {
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-weight: 600;
-            font-size: 1.1rem;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 0.9rem;
         }
 
-        .score-excellent {
-            background: #d4edda;
-            color: #155724;
+        .score-excellent { background: #d1fae5; color: #065f46; }
+        .score-good { background: #dbeafe; color: #1e40af; }
+        .score-average { background: #fef3c7; color: #92400e; }
+        .score-poor { background: #fee2e2; color: #991b1b; }
+
+        .alert {
+            padding: 1rem 1.25rem;
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
+            font-weight: 500;
         }
 
-        .score-good {
-            background: #d1ecf1;
-            color: #0c5460;
+        .alert-success {
+            background: #d1fae5;
+            color: #065f46;
+            border: 1px solid #6ee7b7;
         }
 
-        .score-average {
-            background: #fff3cd;
-            color: #856404;
+        .alert-error {
+            background: #fee2e2;
+            color: #991b1b;
+            border: 1px solid #fca5a5;
         }
 
-        .score-poor {
-            background: #f8d7da;
-            color: #721c24;
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: var(--gray);
+        }
+
+        .empty-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 3rem;
+            color: var(--gray);
+        }
+
+        .spinner {
+            border: 3px solid var(--light);
+            border-radius: 50%;
+            border-top: 3px solid var(--primary);
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .hidden {
+            display: none !important;
         }
 
         @media (max-width: 768px) {
-            .header {
-                flex-direction: column;
-                gap: 15px;
+            .dashboard-container {
+                padding: 1rem;
+            }
+
+            .welcome-section {
+                padding: 2rem;
             }
 
             .tabs {
@@ -378,56 +448,96 @@
     </style>
 </head>
 <body>
-    <div class="container">
-        <!-- Header -->
-        <div class="header">
-            <div>
-                <h1>👨‍🏫 Faculty Dashboard</h1>
-                <div class="user-badge" id="userName"></div>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <div class="logo-icon">🎯</div>
+                <span>SkillProbe</span>
             </div>
-            <button class="logout-btn" onclick="logout()">Logout</button>
+            <div class="user-section">
+                <div class="user-info">
+                    <div class="user-name" id="userName">Loading...</div>
+                    <div class="user-role">Faculty</div>
+                </div>
+                <button class="btn btn-danger" onclick="logout()">Logout</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="dashboard-container">
+        <div class="welcome-section">
+            <h1 class="welcome-title">Faculty Dashboard 👨‍🏫</h1>
+            <p style="opacity: 0.95; font-size: 1.1rem;">Manage questions and track student progress</p>
         </div>
 
-        <!-- Tabs -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon" style="background: linear-gradient(135deg, #667eea, #764ba2);">📚</div>
+                <div class="stat-value" id="totalQuestions">0</div>
+                <div class="stat-label">Questions Uploaded</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon" style="background: linear-gradient(135deg, #f093fb, #f5576c);">👥</div>
+                <div class="stat-value" id="totalStudents">0</div>
+                <div class="stat-label">Students</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon" style="background: linear-gradient(135deg, #4facfe, #00f2fe);">📊</div>
+                <div class="stat-value" id="avgScore">0%</div>
+                <div class="stat-label">Avg Student Score</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon" style="background: linear-gradient(135deg, #fa709a, #fee140);">🏆</div>
+                <div class="stat-value" id="totalTests">0</div>
+                <div class="stat-label">Tests Taken</div>
+            </div>
+        </div>
+
         <div class="tabs">
-            <div class="tab active" onclick="switchTab('uploadQuestions')">📤 Upload Questions</div>
-            <div class="tab" onclick="switchTab('studentReports')">📊 Student Reports</div>
-            <div class="tab" onclick="switchTab('takeTest')">📝 Take Test</div>
-            <div class="tab" onclick="switchTab('testHistory')">📋 My Test History</div>
+            <button class="tab active" onclick="switchTab('uploadQuestions')">📤 Upload Questions</button>
+            <button class="tab" onclick="switchTab('studentReports')">📊 Student Reports</button>
+            <button class="tab" onclick="switchTab('takeTest')">📝 Take Test</button>
+            <button class="tab" onclick="switchTab('testHistory')">📋 My History</button>
         </div>
 
         <!-- Upload Questions Tab -->
         <div id="uploadQuestions" class="tab-content active">
             <div class="card">
-                <h2>Upload Questions</h2>
-                <div id="uploadSuccess" class="success hidden"></div>
-                <div id="uploadError" class="error hidden"></div>
+                <div class="card-header">
+                    <h2 class="card-title">Upload Questions</h2>
+                </div>
+                
+                <div id="uploadSuccess" class="alert alert-success hidden"></div>
+                <div id="uploadError" class="alert alert-error hidden"></div>
                 
                 <div class="form-group">
-                    <label for="uploadDomain">Select Domain:</label>
-                    <select id="uploadDomain">
-                        <option value="">-- Select a Domain --</option>
+                    <label for="uploadDomain">📚 Select Domain</label>
+                    <select id="uploadDomain" class="form-control">
+                        <option value="">-- Select Domain --</option>
                     </select>
                 </div>
 
                 <div class="form-group">
-                    <label for="questionSetName">Question Set Name:</label>
-                    <input type="text" id="questionSetName" placeholder="e.g., Set_1, Basic_Concepts, etc.">
-                    <small style="color: #666;">Leave empty for auto-generated set name</small>
+                    <label for="questionSetName">📑 Question Set Name</label>
+                    <input type="text" id="questionSetName" class="form-control" placeholder="e.g., Set_1, Advanced_Topics">
+                    <small style="color: var(--gray); font-size: 0.85rem;">Leave empty for auto-generated name</small>
                 </div>
                 
                 <div id="questionsForm"></div>
                 
-                <button class="secondary" onclick="addQuestion()">➕ Add Question</button>
-                <button onclick="uploadQuestions()">📤 Upload All Questions</button>
+                <div style="display: flex; gap: 1rem; margin-top: 1.5rem;">
+                    <button class="btn btn-secondary" onclick="addQuestion()">➕ Add Question</button>
+                    <button class="btn btn-success" onclick="uploadQuestions()">📤 Upload All</button>
+                </div>
             </div>
         </div>
 
         <!-- Student Reports Tab -->
         <div id="studentReports" class="tab-content">
             <div class="card">
-                <h2>Student Performance Reports</h2>
-                <p style="color: #666; margin-bottom: 20px;">View performance of students who took tests on your uploaded questions</p>
+                <div class="card-header">
+                    <h2 class="card-title">Student Performance Reports</h2>
+                </div>
                 <div id="reportsContainer"></div>
             </div>
         </div>
@@ -435,26 +545,28 @@
         <!-- Take Test Tab -->
         <div id="takeTest" class="tab-content">
             <div class="card">
-                <h2>Take a Test</h2>
-                <div id="testError" class="error hidden"></div>
+                <div class="card-header">
+                    <h2 class="card-title">Take a Test</h2>
+                </div>
+                <div id="testError" class="alert alert-error hidden"></div>
                 
                 <div class="form-group">
-                    <label for="testDomain">Select Domain:</label>
-                    <select id="testDomain" onchange="loadQuestionSets()">
-                        <option value="">-- Select a Domain --</option>
+                    <label for="testDomain">📚 Select Domain</label>
+                    <select id="testDomain" class="form-control" onchange="loadQuestionSets()">
+                        <option value="">-- Select Domain --</option>
                     </select>
                 </div>
                 
                 <div class="form-group" id="questionSetGroup" style="display: none;">
-                    <label for="questionSet">Select Question Set:</label>
-                    <select id="questionSet">
+                    <label for="questionSet">📑 Question Set</label>
+                    <select id="questionSet" class="form-control">
                         <option value="all">All Questions (Mixed)</option>
                     </select>
                 </div>
                 
                 <div class="form-group">
-                    <label for="questionLimit">Number of Questions:</label>
-                    <select id="questionLimit">
+                    <label for="questionLimit">🔢 Number of Questions</label>
+                    <select id="questionLimit" class="form-control">
                         <option value="5">5 Questions</option>
                         <option value="10" selected>10 Questions</option>
                         <option value="15">15 Questions</option>
@@ -462,16 +574,18 @@
                     </select>
                 </div>
                 
-                <button onclick="startTest()">Start Test</button>
+                <button class="btn btn-primary" onclick="startTest()">Start Test</button>
             </div>
 
             <div id="testInterface" class="hidden">
                 <div class="card">
-                    <h2>🧪 Test in Progress</h2>
+                    <div class="card-header">
+                        <h2 class="card-title">Test in Progress 🧪</h2>
+                    </div>
                     <div id="questionsContainer"></div>
-                    <div style="margin-top: 30px;">
-                        <button onclick="submitTest()">✅ Submit Test</button>
-                        <button class="secondary" onclick="cancelTest()">❌ Cancel</button>
+                    <div style="margin-top: 2rem;">
+                        <button class="btn btn-primary" onclick="submitTest()">✅ Submit Test</button>
+                        <button class="btn btn-secondary" onclick="cancelTest()">❌ Cancel</button>
                     </div>
                 </div>
             </div>
@@ -482,7 +596,9 @@
         <!-- Test History Tab -->
         <div id="testHistory" class="tab-content">
             <div class="card">
-                <h2>Your Test History</h2>
+                <div class="card-header">
+                    <h2 class="card-title">Your Test History</h2>
+                </div>
                 <div id="historyContainer"></div>
             </div>
         </div>
@@ -495,10 +611,9 @@
         let currentTest = { questions: [], domainId: null };
         let questionCount = 0;
 
-        // Check authentication
         async function checkAuth() {
             if (!token) {
-                window.location.href = 'index.html';
+                window.location.href = 'login.html';
                 return;
             }
 
@@ -512,14 +627,16 @@
                     currentUser = data.user;
 
                     if (currentUser.user_type !== 'faculty') {
-                        alert('Access denied. This dashboard is for faculty only.');
+                        alert('Access denied');
                         logout();
                         return;
                     }
 
                     document.getElementById('userName').textContent = currentUser.full_name;
                     await loadDomains();
-                    addQuestion(); // Add first question by default
+                    await loadFacultyStats(); // NEW: Load faculty stats
+                    await loadStudentReports();
+                    addQuestion();
                 } else {
                     logout();
                 }
@@ -529,7 +646,59 @@
             }
         }
 
-        // Load domains
+        // NEW: Load faculty statistics
+        async function loadFacultyStats() {
+            try {
+                // Load question stats
+                const questionStatsResponse = await fetch(`${API_BASE}/faculty/question-stats`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                
+                if (questionStatsResponse.ok) {
+                    const questionStats = await questionStatsResponse.json();
+                    if (questionStats.statistics && questionStats.statistics.length > 0) {
+                        const totalQuestions = questionStats.statistics.reduce((sum, stat) => sum + parseInt(stat.total_questions), 0);
+                        document.getElementById('totalQuestions').textContent = totalQuestions;
+                    }
+                }
+
+                // Load student reports for stats
+                const studentReportsResponse = await fetch(`${API_BASE}/faculty/student-reports`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+
+                if (studentReportsResponse.ok) {
+                    const studentReports = await studentReportsResponse.json();
+                    if (studentReports.student_reports && studentReports.student_reports.length > 0) {
+                        document.getElementById('totalStudents').textContent = studentReports.total_students;
+                        
+                        // Calculate average score
+                        let totalScore = 0;
+                        let totalStudentsWithScore = 0;
+                        
+                        studentReports.student_reports.forEach(report => {
+                            if (report.student.average_score && report.student.average_score !== '0.00') {
+                                totalScore += parseFloat(report.student.average_score);
+                                totalStudentsWithScore++;
+                            }
+                        });
+                        
+                        const avgScore = totalStudentsWithScore > 0 ? (totalScore / totalStudentsWithScore).toFixed(1) : 0;
+                        document.getElementById('avgScore').textContent = avgScore + '%';
+
+                        // Calculate total tests
+                        let totalTests = 0;
+                        studentReports.student_reports.forEach(report => {
+                            totalTests += parseInt(report.student.total_tests_taken);
+                        });
+                        document.getElementById('totalTests').textContent = totalTests;
+                    }
+                }
+            } catch (error) {
+                console.error('Error loading faculty stats:', error);
+            }
+        }
+
         async function loadDomains() {
             try {
                 const response = await fetch(`${API_BASE}/domains`, {
@@ -540,8 +709,8 @@
                 const uploadSelect = document.getElementById('uploadDomain');
                 const testSelect = document.getElementById('testDomain');
                 
-                uploadSelect.innerHTML = '<option value="">-- Select a Domain --</option>';
-                testSelect.innerHTML = '<option value="">-- Select a Domain --</option>';
+                uploadSelect.innerHTML = '<option value="">-- Select Domain --</option>';
+                testSelect.innerHTML = '<option value="">-- Select Domain --</option>';
                 
                 data.domains.forEach(domain => {
                     uploadSelect.innerHTML += `<option value="${domain.domain_id}">${domain.domain_name}</option>`;
@@ -552,22 +721,6 @@
             }
         }
 
-        // Switch tabs
-        function switchTab(tabName) {
-            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-            
-            event.target.classList.add('active');
-            document.getElementById(tabName).classList.add('active');
-            
-            if (tabName === 'testHistory') {
-                loadTestHistory();
-            } else if (tabName === 'studentReports') {
-                loadStudentReports();
-            }
-        }
-
-        // Load question sets when domain is selected
         async function loadQuestionSets() {
             const domainId = document.getElementById('testDomain').value;
             const setGroup = document.getElementById('questionSetGroup');
@@ -602,7 +755,100 @@
             }
         }
 
-        // Add question
+        async function loadStudentReports() {
+            const container = document.getElementById('reportsContainer');
+            container.innerHTML = '<div class="loading"><div class="spinner"></div><p>Loading reports...</p></div>';
+
+            try {
+                const response = await fetch(`${API_BASE}/faculty/student-reports`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                const data = await response.json();
+
+                if (data.student_reports && data.student_reports.length > 0) {
+                    let html = '<div style="background: #e3f2fd; padding: 1.5rem; border-radius: 12px; margin-bottom: 2rem;">';
+                    html += '<h3 style="color: var(--primary); margin-bottom: 0.5rem;">Your Domains:</h3>';
+                    html += '<p>' + data.faculty_domains.map(d => 
+                        `<strong>${d.domain_name}</strong> (${d.question_count} questions)`
+                    ).join(', ') + '</p>';
+                    html += `<p style="margin-top: 0.5rem;"><strong>Total Students:</strong> ${data.total_students}</p>`;
+                    html += '</div>';
+
+                    data.student_reports.forEach(report => {
+                        const avgScore = parseFloat(report.student.average_score);
+                        const scoreClass = avgScore >= 80 ? 'score-excellent' : 
+                                         avgScore >= 60 ? 'score-good' : 
+                                         avgScore >= 40 ? 'score-average' : 'score-poor';
+
+                        html += `
+                            <div class="student-report-card">
+                                <h4>👨‍🎓 ${report.student.full_name} (@${report.student.username})</h4>
+                                <p style="color: var(--gray); margin-bottom: 1rem;">${report.student.email}</p>
+                                
+                                <div class="report-summary">
+                                    <div class="report-stat">
+                                        <h3>${report.student.total_tests_taken}</h3>
+                                        <p>Tests Taken</p>
+                                    </div>
+                                    <div class="report-stat">
+                                        <h3 class="${scoreClass}">${report.student.average_score}%</h3>
+                                        <p>Average Score</p>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <h5 style="margin-bottom: 0.5rem; color: var(--dark);">Test History:</h5>
+                                    ${report.tests.map(test => {
+                                        const testScoreClass = test.percentage >= 80 ? 'score-excellent' : 
+                                                             test.percentage >= 60 ? 'score-good' : 
+                                                             test.percentage >= 40 ? 'score-average' : 'score-poor';
+                                        return `
+                                            <div class="test-detail-item">
+                                                <div>
+                                                    <strong>${test.domain_name}</strong><br>
+                                                    <small style="color: var(--gray);">${new Date(test.test_date).toLocaleString()}</small>
+                                                </div>
+                                                <span class="score-badge ${testScoreClass}">
+                                                    ${test.score}/${test.total_questions} (${test.percentage}%)
+                                                </span>
+                                            </div>
+                                        `;
+                                    }).join('')}
+                                </div>
+                            </div>
+                        `;
+                    });
+
+                    container.innerHTML = html;
+                } else {
+                    container.innerHTML = `
+                        <div class="empty-state">
+                            <div class="empty-icon">📊</div>
+                            <h3>No Student Reports Yet</h3>
+                            <p>${data.message || 'No students have taken tests on your questions yet.'}</p>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                console.error('Error loading student reports:', error);
+                container.innerHTML = '<div class="alert alert-error">Error loading student reports.</div>';
+            }
+        }
+
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            
+            event.target.classList.add('active');
+            document.getElementById(tabName).classList.add('active');
+            
+            if (tabName === 'studentReports') {
+                loadStudentReports();
+            } else if (tabName === 'testHistory') {
+                loadTestHistory();
+            }
+        }
+
         function addQuestion() {
             questionCount++;
             const form = document.getElementById('questionsForm');
@@ -613,61 +859,63 @@
             div.innerHTML = `
                 <button class="remove-question" onclick="removeQuestion(${questionCount})">✕ Remove</button>
                 <h3>Question ${questionCount}</h3>
-                <label>Question Text:</label>
-                <textarea rows="3" placeholder="Enter your question..." required></textarea>
-                
-                <label>Option A:</label>
-                <input type="text" placeholder="Option A" required>
-                
-                <label>Option B:</label>
-                <input type="text" placeholder="Option B" required>
-                
-                <label>Option C (Optional):</label>
-                <input type="text" placeholder="Option C">
-                
-                <label>Option D (Optional):</label>
-                <input type="text" placeholder="Option D">
-                
-                <label>Correct Answer:</label>
-                <select required>
-                    <option value="">-- Select Correct Answer --</option>
-                    <option value="A">A</option>
-                    <option value="B">B</option>
-                    <option value="C">C</option>
-                    <option value="D">D</option>
-                </select>
+                <div class="form-group">
+                    <label>Question Text</label>
+                    <textarea class="form-control" rows="2" placeholder="Enter question..." required></textarea>
+                </div>
+                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem;">
+                    <div class="form-group">
+                        <label>Option A</label>
+                        <input type="text" class="form-control" placeholder="Option A" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Option B</label>
+                        <input type="text" class="form-control" placeholder="Option B" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Option C (Optional)</label>
+                        <input type="text" class="form-control" placeholder="Option C">
+                    </div>
+                    <div class="form-group">
+                        <label>Option D (Optional)</label>
+                        <input type="text" class="form-control" placeholder="Option D">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Correct Answer</label>
+                    <select class="form-control" required>
+                        <option value="">-- Select --</option>
+                        <option value="A">A</option>
+                        <option value="B">B</option>
+                        <option value="C">C</option>
+                        <option value="D">D</option>
+                    </select>
+                </div>
             `;
             form.appendChild(div);
         }
 
-        // Remove question
         function removeQuestion(id) {
-            const element = document.getElementById(`question-${id}`);
-            if (element) {
-                element.remove();
-            }
+            document.getElementById(`question-${id}`)?.remove();
         }
 
-        // Upload questions
         async function uploadQuestions() {
             const domainId = document.getElementById('uploadDomain').value;
             const questionSetName = document.getElementById('questionSetName').value.trim();
             const form = document.getElementById('questionsForm');
             
             if (!domainId) {
-                showError('uploadError', 'Please select a domain');
+                showAlert('uploadError', 'Select a domain');
                 return;
             }
             
             const questionDivs = form.querySelectorAll('.question-input');
-            
             if (questionDivs.length === 0) {
-                showError('uploadError', 'Please add at least one question');
+                showAlert('uploadError', 'Add at least one question');
                 return;
             }
 
             const questions = [];
-            
             for (const div of questionDivs) {
                 const inputs = div.querySelectorAll('input, textarea, select');
                 const question = {
@@ -680,14 +928,11 @@
                 };
 
                 if (!question.question_text || !question.option_a || !question.option_b || !question.correct_option) {
-                    showError('uploadError', 'Please fill all required fields (Question, Option A, Option B, Correct Answer)');
+                    showAlert('uploadError', 'Fill required fields');
                     return;
                 }
-
                 questions.push(question);
             }
-
-            hideError('uploadError');
 
             try {
                 const response = await fetch(`${API_BASE}/questions/upload`, {
@@ -696,45 +941,37 @@
                         'Content-Type': 'application/json',
                         'Authorization': `Bearer ${token}`
                     },
-                    body: JSON.stringify({ 
-                        domain_id: domainId, 
-                        questions,
-                        question_set_name: questionSetName || undefined
-                    })
+                    body: JSON.stringify({ domain_id: domainId, questions, question_set_name: questionSetName })
                 });
 
                 const result = await response.json();
                 
                 if (response.ok) {
-                    showSuccess('uploadSuccess', `✅ Successfully uploaded ${result.total_questions} questions in set "${result.question_set}"!`);
-                    
-                    // Clear form
+                    showAlert('uploadSuccess', `✅ Uploaded ${result.total_questions} questions!`);
                     form.innerHTML = '';
                     questionCount = 0;
                     addQuestion();
                     document.getElementById('uploadDomain').value = '';
                     document.getElementById('questionSetName').value = '';
+                    // Reload stats after successful upload
+                    await loadFacultyStats();
                 } else {
-                    showError('uploadError', result.error || 'Upload failed');
+                    showAlert('uploadError', result.error);
                 }
             } catch (error) {
-                console.error('Error uploading questions:', error);
-                showError('uploadError', 'Network error. Please try again.');
+                showAlert('uploadError', 'Network error');
             }
         }
 
-        // Start test
         async function startTest() {
             const domainId = document.getElementById('testDomain').value;
             const questionSet = document.getElementById('questionSet').value;
             const questionLimit = document.getElementById('questionLimit').value;
             
             if (!domainId) {
-                showError('testError', 'Please select a domain');
+                showAlert('testError', 'Select a domain');
                 return;
             }
-
-            hideError('testError');
 
             try {
                 let url = `${API_BASE}/questions/${domainId}?limit=${questionLimit}`;
@@ -748,7 +985,7 @@
 
                 if (!response.ok) {
                     const error = await response.json();
-                    showError('testError', error.error || 'Failed to load questions');
+                    showAlert('testError', error.error);
                     return;
                 }
 
@@ -758,30 +995,30 @@
                     currentTest = { questions: data.questions, domainId };
                     displayQuestions();
                     document.getElementById('testInterface').classList.remove('hidden');
-                    document.getElementById('testInterface').scrollIntoView({ behavior: 'smooth' });
                 } else {
-                    showError('testError', 'No questions available for this domain/set');
+                    showAlert('testError', 'No questions available');
                 }
             } catch (error) {
-                console.error('Error loading questions:', error);
-                showError('testError', 'Network error. Please try again.');
+                showAlert('testError', 'Network error');
             }
         }
 
-        // Display questions
         function displayQuestions() {
             const container = document.getElementById('questionsContainer');
             container.innerHTML = '';
             
             currentTest.questions.forEach((q, index) => {
                 const div = document.createElement('div');
-                div.className = 'question-card';
+                div.className = 'question-input';
                 div.innerHTML = `
                     <h3>Question ${index + 1} of ${currentTest.questions.length}</h3>
-                    <p><strong>${q.question_text}</strong></p>
-                    <div class="options">
+                    <div class="form-group">
+                        <label>Question</label>
+                        <p style="font-weight: 600; color: var(--dark);">${q.question_text}</p>
+                    </div>
+                    <div style="display: grid; gap: 1rem;">
                         ${q.options.map(opt => `
-                            <label class="option">
+                            <label style="display: flex; align-items: center; gap: 1rem; padding: 1rem; border: 2px solid #e2e8f0; border-radius: 8px; cursor: pointer;">
                                 <input type="radio" name="q${index}" value="${opt.key}">
                                 <span><strong>${opt.key}.</strong> ${opt.value}</span>
                             </label>
@@ -792,7 +1029,6 @@
             });
         }
 
-        // Submit test
         async function submitTest() {
             const answers = currentTest.questions.map((q, index) => {
                 const selected = document.querySelector(`input[name="q${index}"]:checked`);
@@ -801,14 +1037,6 @@
                     selected_option: selected ? selected.value : ''
                 };
             });
-
-            const unanswered = answers.filter(a => !a.selected_option).length;
-            
-            if (unanswered > 0) {
-                if (!confirm(`You have ${unanswered} unanswered question(s). Submit anyway?`)) {
-                    return;
-                }
-            }
 
             try {
                 const response = await fetch(`${API_BASE}/tests/submit`, {
@@ -827,43 +1055,44 @@
                 
                 if (response.ok) {
                     displayResults(result);
-                    await loadTestHistory();
+                    loadTestHistory();
                 } else {
-                    alert(result.error || 'Error submitting test');
+                    alert(result.error);
                 }
             } catch (error) {
-                console.error('Error submitting test:', error);
-                alert('Network error. Please try again.');
+                alert('Network error');
             }
         }
 
-        // Display results
         function displayResults(result) {
             document.getElementById('testInterface').classList.add('hidden');
             
             const resultsDiv = document.getElementById('testResults');
             resultsDiv.innerHTML = `
-                <div class="result-card">
-                    <h2>🎉 Test Completed!</h2>
-                    <div class="score">${result.percentage}%</div>
-                    <div style="font-size: 1.2rem;">
-                        <p><strong>Score:</strong> ${result.score}/${result.total_questions}</p>
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Test Results</h2>
                     </div>
-                    <button onclick="resetTest()" style="margin-top: 20px;">Take Another Test</button>
+                    <div style="text-align: center; padding: 2rem;">
+                        <div style="font-size: 4rem; font-weight: 800; color: var(--success); margin: 1rem 0;">
+                            ${result.percentage}%
+                        </div>
+                        <p style="font-size: 1.2rem; color: var(--gray);">
+                            Score: ${result.score}/${result.total_questions}
+                        </p>
+                        <button class="btn btn-primary" onclick="resetTest()" style="margin-top: 1rem;">Take Another Test</button>
+                    </div>
                 </div>
             `;
             resultsDiv.classList.remove('hidden');
-            resultsDiv.scrollIntoView({ behavior: 'smooth' });
         }
 
-        // Cancel test
         function cancelTest() {
-            if (confirm('Cancel test? All progress will be lost.')) {
+            if (confirm('Cancel test?')) {
                 resetTest();
             }
         }
 
-        // Reset test
         function resetTest() {
             document.getElementById('testInterface').classList.add('hidden');
             document.getElementById('testResults').classList.add('hidden');
@@ -872,10 +1101,9 @@
             currentTest = { questions: [], domainId: null };
         }
 
-        // Load test history
         async function loadTestHistory() {
             const container = document.getElementById('historyContainer');
-            container.innerHTML = '<div style="text-align: center; padding: 20px; color: #999;">Loading...</div>';
+            container.innerHTML = '<div class="loading"><div class="spinner"></div><p>Loading history...</p></div>';
 
             try {
                 const response = await fetch(`${API_BASE}/tests/history`, {
@@ -885,135 +1113,37 @@
                 
                 if (data.tests && data.tests.length > 0) {
                     container.innerHTML = data.tests.map(test => `
-                        <div class="test-item">
-                            <p><strong>Domain:</strong> ${test.domain_name}</p>
-                            <p><strong>Date:</strong> ${new Date(test.test_date).toLocaleString()}</p>
-                            <p><strong>Score:</strong> ${test.score}/${test.total_questions} (${test.percentage}%)</p>
+                        <div class="test-detail-item">
+                            <div>
+                                <strong>${test.domain_name}</strong><br>
+                                <small style="color: var(--gray);">${new Date(test.test_date).toLocaleString()}</small>
+                            </div>
+                            <span class="score-badge ${test.percentage >= 70 ? 'score-excellent' : 'score-average'}">
+                                ${test.score}/${test.total_questions} (${test.percentage}%)
+                            </span>
                         </div>
                     `).join('');
                 } else {
-                    container.innerHTML = `
-                        <div class="empty-state">
-                            <h3>No Tests Yet</h3>
-                            <p>You haven't taken any tests yet.</p>
-                        </div>
-                    `;
+                    container.innerHTML = '<div class="empty-state"><div class="empty-icon">📝</div><h3>No Tests Yet</h3></div>';
                 }
             } catch (error) {
-                console.error('Error loading history:', error);
-                container.innerHTML = '<div class="error">Error loading test history.</div>';
+                container.innerHTML = '<div class="alert alert-error">Error loading history</div>';
             }
         }
 
-        // Load student reports
-        async function loadStudentReports() {
-            const container = document.getElementById('reportsContainer');
-            container.innerHTML = '<div style="text-align: center; padding: 20px; color: #999;">Loading student reports...</div>';
-
-            try {
-                const response = await fetch(`${API_BASE}/faculty/student-reports`, {
-                    headers: { 'Authorization': `Bearer ${token}` }
-                });
-                const data = await response.json();
-
-                if (data.student_reports && data.student_reports.length > 0) {
-                    // Show faculty domains first
-                    let html = '<div style="background: #e3f2fd; padding: 15px; border-radius: 8px; margin-bottom: 20px;">';
-                    html += '<h3>Your Domains:</h3>';
-                    html += '<p>' + data.faculty_domains.map(d => 
-                        `<strong>${d.domain_name}</strong> (${d.question_count} questions)`
-                    ).join(', ') + '</p>';
-                    html += `<p style="margin-top: 10px;"><strong>Total Students:</strong> ${data.total_students}</p>`;
-                    html += '</div>';
-
-                    // Show each student's report
-                    data.student_reports.forEach(report => {
-                        const avgScore = parseFloat(report.student.average_score);
-                        const scoreClass = avgScore >= 80 ? 'score-excellent' : 
-                                         avgScore >= 60 ? 'score-good' : 
-                                         avgScore >= 40 ? 'score-average' : 'score-poor';
-
-                        html += `
-                            <div class="student-report-card">
-                                <h4>👨‍🎓 ${report.student.full_name} (@${report.student.username})</h4>
-                                <p style="color: #666; margin-bottom: 15px;">${report.student.email}</p>
-                                
-                                <div class="report-summary">
-                                    <div class="report-stat">
-                                        <h3>${report.student.total_tests_taken}</h3>
-                                        <p>Tests Taken</p>
-                                    </div>
-                                    <div class="report-stat">
-                                        <h3 class="${scoreClass}">${report.student.average_score}%</h3>
-                                        <p>Average Score</p>
-                                    </div>
-                                </div>
-
-                                <div class="test-details">
-                                    <h5 style="margin-bottom: 10px;">Test History:</h5>
-                                    ${report.tests.map(test => {
-                                        const testScoreClass = test.percentage >= 80 ? 'score-excellent' : 
-                                                             test.percentage >= 60 ? 'score-good' : 
-                                                             test.percentage >= 40 ? 'score-average' : 'score-poor';
-                                        return `
-                                            <div class="test-detail-item">
-                                                <div>
-                                                    <strong>${test.domain_name}</strong><br>
-                                                    <small style="color: #666;">${new Date(test.test_date).toLocaleString()}</small>
-                                                </div>
-                                                <span class="score-badge ${testScoreClass}">
-                                                    ${test.score}/${test.total_questions} (${test.percentage}%)
-                                                </span>
-                                            </div>
-                                        `;
-                                    }).join('')}
-                                </div>
-                            </div>
-                        `;
-                    });
-
-                    container.innerHTML = html;
-                } else {
-                    container.innerHTML = `
-                        <div class="empty-state">
-                            <h3>No Student Reports Yet</h3>
-                            <p>${data.message || 'No students have taken tests on your questions yet.'}</p>
-                        </div>
-                    `;
-                }
-            } catch (error) {
-                console.error('Error loading student reports:', error);
-                container.innerHTML = '<div class="error">Error loading student reports. Please try again.</div>';
-            }
-        }
-
-        // Utility functions
-        function showError(elementId, message) {
+        function showAlert(elementId, message) {
             const el = document.getElementById(elementId);
             el.textContent = message;
             el.classList.remove('hidden');
             setTimeout(() => el.classList.add('hidden'), 5000);
         }
 
-        function hideError(elementId) {
-            document.getElementById(elementId).classList.add('hidden');
-        }
-
-        function showSuccess(elementId, message) {
-            const el = document.getElementById(elementId);
-            el.textContent = message;
-            el.classList.remove('hidden');
-            setTimeout(() => el.classList.add('hidden'), 5000);
-        }
-
-        // Logout
         function logout() {
             localStorage.removeItem('token');
             localStorage.removeItem('user');
-            window.location.href = 'index.html';
+            window.location.href = 'login.html';
         }
 
-        // Initialize
         window.onload = checkAuth;
     </script>
 </body>
